@@ -22,7 +22,7 @@ func Interpret() error {
   var globalEnv Env
   for _, line := range ast {
     if codeLine, ok := line.([]interface{}); ok {
-      Evaluate(codeLine, &globalEnv)
+      Evaluate(&globalEnv, codeLine)
     }
   }
   return nil
@@ -38,7 +38,5 @@ func debugPrint(xs ...interface{}) {
     list = append(list, interface{}(string(json)))
   }
   fmt.Println("")
-  fmt.Println("")
-  fmt.Println(xs...)
   fmt.Println(list...)
 }
