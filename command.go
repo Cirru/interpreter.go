@@ -17,7 +17,7 @@ func Interpret() error {
   }
   code := string(codeByte)
   ast := cirru.Parse(code, filename)
-  var globalEnv Env
+  globalEnv := Env{}
   for _, line := range ast {
     if list, ok := line.(cirru.List); ok {
       Evaluate(&globalEnv, list)

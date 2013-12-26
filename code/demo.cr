@@ -1,8 +1,6 @@
 
-echo nothing
-
-echo (a list)
-
 set a (int 1)
+set b (int 2)
+print a b
 
-print a
+print $ bool yes

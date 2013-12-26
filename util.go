@@ -7,6 +7,9 @@ import (
 )
 
 func stringifyObject(data Object) string {
+  if &data.Tag == nil {
+    return "nil"
+  }
   switch data.Tag {
     case "string":
       if stringValue, ok := data.Value.(string); ok {
@@ -20,8 +23,16 @@ func stringifyObject(data Object) string {
       if floatValue, ok := data.Value.(float64); ok {
         return fmt.Sprintf("%g", floatValue)
       }
+    case "bool":
+      if value, ok := data.Value.(bool); ok {
+        if value {
+          return "#t"
+        }
+        return "#f"
+      }
     case "array": return "::array::"
     case "map": return "::map::"
+    default: return "<unknown>"
   }
   return ""
 }

@@ -76,6 +76,7 @@ func cirruPrint(env *Env, xs cirru.List) (ret Object) {
 }
 
 func cirruSet(env *Env, xs cirru.List) (ret Object) {
+  // debugPrint("cirruSet:", xs)
   value := cirruGet(env, xs[1:2])
   if token, ok := xs[0].(cirru.Token); ok {
     (*env)[token.Text] = value
@@ -101,6 +102,21 @@ func cirruGet(env *Env, xs cirru.List) (ret Object) {
   }
   if list, ok := xs[0].(cirru.List); ok {
     ret = Evaluate(env, list)
+    return
+  }
+  return
+}
+
+func cirruBool(env *Env, xs cirru.List) (ret Object) {
+  ret.Tag = "bool"
+  ret.Value = false
+  if token, ok := xs[0].(cirru.Token); ok {
+    trueValues := []string{"true", "yes", "riight", "1"}
+    for _, text := range trueValues {
+      if text == token.Text {
+        ret.Value = true
+      }
+    }
     return
   }
   return
