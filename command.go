@@ -21,15 +21,15 @@ func Interpret() error {
   ast := cirru.Parse(code, filename)
   var globalEnv Env
   for _, line := range ast {
-    if codeLine, ok := line.([]interface{}); ok {
-      Evaluate(&globalEnv, codeLine)
+    if list, ok := line.(cirru.List); ok {
+      Evaluate(&globalEnv, list)
     }
   }
   return nil
 }
 
 func debugPrint(xs ...interface{}) {
-  list := []interface{}{}
+  list := cirru.List{}
   for _, item := range xs {
     json, err := json.MarshalIndent(item, "", "  ")
     if err != nil {

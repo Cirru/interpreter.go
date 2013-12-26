@@ -3,4 +3,6 @@ echo nothing
 
 echo (a list)
 
-print (int 1)
+set a (int 1)
+
+print a

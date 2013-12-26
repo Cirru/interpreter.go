@@ -13,7 +13,7 @@ type cirruObject struct {
 type Env map[string]cirruObject
 
 // Evaluate read expressions and return a single result
-func Evaluate(env *Env, codeLine []interface{}) (ret cirruObject) {
+func Evaluate(env *Env, codeLine cirru.List) (ret cirruObject) {
   // debugPrint(codeLine, env)
   if len(codeLine) == 0 {
     emptyArray := cirruObject{"list", codeLine}
@@ -22,7 +22,7 @@ func Evaluate(env *Env, codeLine []interface{}) (ret cirruObject) {
 
   head := codeLine[0]
 
-  if headBuffer, ok := head.(cirru.BufferObj); ok {
+  if headBuffer, ok := head.(cirru.Token); ok {
     // debugPrint(headBuffer.Text)
     switch headBuffer.Text {
     case "echo":      ret = cirruEcho    (env, codeLine[1:])
@@ -33,7 +33,7 @@ func Evaluate(env *Env, codeLine []interface{}) (ret cirruObject) {
     }
     return
   }
-  if headExpression, ok := head.([]interface{}); ok {
+  if headExpression, ok := head.(cirru.List); ok {
     debugPrint(headExpression)
     return
   }
