@@ -3,10 +3,11 @@ package cirruGopher
 
 import (
   "fmt"
+  "encoding/json"
 )
 
-func stringifyObject(data cirruObject) string {
-  switch data.Typing {
+func stringifyObject(data Object) string {
+  switch data.Tag {
     case "string":
       if stringValue, ok := data.Value.(string); ok {
         return stringValue
@@ -23,4 +24,18 @@ func stringifyObject(data cirruObject) string {
     case "map": return "::map::"
   }
   return ""
+}
+
+func debugPrint(xs ...interface{}) {
+  list := []interface{}{}
+  for _, item := range xs {
+    json, err := json.MarshalIndent(item, "", "  ")
+    if err != nil {
+      panic(err)
+    }
+    list = append(list, interface{}(string(json)))
+  }
+  fmt.Println("")
+  fmt.Println(xs)
+  fmt.Println(list...)
 }

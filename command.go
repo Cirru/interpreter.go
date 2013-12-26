@@ -4,10 +4,8 @@
 package cirruGopher
 
 import (
-  "fmt"
   "io/ioutil"
   "github.com/jiyinyiyong/cirru-grammar"
-  "encoding/json"
 )
 
 // Interpret takes result from `cirru.Parse` and run in context.
@@ -26,17 +24,4 @@ func Interpret() error {
     }
   }
   return nil
-}
-
-func debugPrint(xs ...interface{}) {
-  list := cirru.List{}
-  for _, item := range xs {
-    json, err := json.MarshalIndent(item, "", "  ")
-    if err != nil {
-      panic(err)
-    }
-    list = append(list, interface{}(string(json)))
-  }
-  fmt.Println("")
-  fmt.Println(list...)
 }

@@ -5,26 +5,26 @@ import (
   "github.com/jiyinyiyong/cirru-grammar"
 )
 
-type cirruObject struct {
-  Typing string
+type Object struct {
+  Tag string
   Value interface{}
 }
 
-type Env map[string]cirruObject
+type Env map[string]Object
 
 // Evaluate read expressions and return a single result
-func Evaluate(env *Env, codeLine cirru.List) (ret cirruObject) {
-  // debugPrint(codeLine, env)
+func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
+  debugPrint(codeLine, *env)
   if len(codeLine) == 0 {
-    emptyArray := cirruObject{"list", codeLine}
+    emptyArray := Object{"list", codeLine}
     return emptyArray
   }
 
   head := codeLine[0]
 
-  if headBuffer, ok := head.(cirru.Token); ok {
-    // debugPrint(headBuffer.Text)
-    switch headBuffer.Text {
+  if token, ok := head.(cirru.Token); ok {
+    // debugPrint(token.Text)
+    switch token.Text {
     case "echo":      ret = cirruEcho    (env, codeLine[1:])
     case "to-string": ret = cirruToString(env, codeLine[1:])
     case "get":       ret = cirruGet     (env, codeLine[1:])

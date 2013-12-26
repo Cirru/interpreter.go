@@ -8,12 +8,12 @@ import (
   "strconv"
 )
 
-func cirruEcho(env *Env, xs cirru.List) (ret cirruObject) {
+func cirruEcho(env *Env, xs cirru.List) (ret Object) {
   fmt.Println(cirruToString(env, xs).Value)
   return
 }
 
-func cirruToString(env *Env, xs cirru.List) (ret cirruObject) {
+func cirruToString(env *Env, xs cirru.List) (ret Object) {
   hold := []string{}
   for _, item := range xs {
     if buffer, ok := item.(cirru.Token); ok {
@@ -26,36 +26,36 @@ func cirruToString(env *Env, xs cirru.List) (ret cirruObject) {
       }
     }
   }
-  ret.Typing = "string"
+  ret.Tag = "string"
   ret.Value = strings.Join(hold, " ")
   return
 }
 
-func cirruInt(env *Env, xs cirru.List) (ret cirruObject) {
+func cirruInt(env *Env, xs cirru.List) (ret Object) {
   if token, ok := xs[0].(cirru.Token); ok {
     intNumber, err := strconv.Atoi(token.Text)
     if err != nil {
       panic(err)
     }
-    ret.Typing = "int"
+    ret.Tag = "int"
     ret.Value = intNumber
   }
   return
 }
 
-func cirruString(env *Env, xs cirru.List) (ret cirruObject) {
+func cirruString(env *Env, xs cirru.List) (ret Object) {
   if token, ok := xs[0].(cirru.Token); ok {
-    ret.Typing = "string"
+    ret.Tag = "string"
     ret.Value = token.Text
   }
   if list, ok := xs[0].(cirru.List); ok {
-    ret.Typing = "string"
+    ret.Tag = "string"
     ret.Value = cirruToString(env, list).Value
   }
   return
 }
 
-func cirruPrint(env *Env, xs cirru.List) (ret cirruObject) {
+func cirruPrint(env *Env, xs cirru.List) (ret Object) {
   outList := []string{}
   for _, value := range xs {
     if token, ok := value.(cirru.Token); ok {
@@ -75,7 +75,7 @@ func cirruPrint(env *Env, xs cirru.List) (ret cirruObject) {
   return
 }
 
-func cirruSet(env *Env, xs cirru.List) (ret cirruObject) {
+func cirruSet(env *Env, xs cirru.List) (ret Object) {
   value := cirruGet(env, xs[1:2])
   if token, ok := xs[0].(cirru.Token); ok {
     (*env)[token.Text] = value
@@ -83,7 +83,7 @@ func cirruSet(env *Env, xs cirru.List) (ret cirruObject) {
   }
   if list, ok := xs[0].(cirru.List); ok {
     variable := cirruGet(env, list[0:1])
-    if variable.Typing == "string" {
+    if variable.Tag == "string" {
       if name, ok := variable.Value.(string); ok {
         (*env)[name] = value
         return value
@@ -93,9 +93,10 @@ func cirruSet(env *Env, xs cirru.List) (ret cirruObject) {
   return
 }
 
-func cirruGet(env *Env, xs cirru.List) (ret cirruObject) {
+func cirruGet(env *Env, xs cirru.List) (ret Object) {
   if token, ok := xs[0].(cirru.Token); ok {
     ret = (*env)[token.Text]
+    println("get...", ret.Tag)
     return
   }
   if list, ok := xs[0].(cirru.List); ok {
