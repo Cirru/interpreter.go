@@ -27,6 +27,7 @@ func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
     switch token.Text {
     case "echo":      ret = cirruEcho    (env, codeLine[1:])
     case "to-string": ret = cirruToString(env, codeLine[1:])
+    case "string":    ret = cirruString  (env, codeLine[1:])
     case "get":       ret = cirruGet     (env, codeLine[1:])
     case "set":       ret = cirruSet     (env, codeLine[1:])
     case "int":       ret = cirruInt     (env, codeLine[1:])

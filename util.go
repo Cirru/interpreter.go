@@ -13,7 +13,7 @@ func stringifyObject(data Object) string {
   switch data.Tag {
     case "string":
       if stringValue, ok := data.Value.(string); ok {
-        return stringValue
+        return "\"" + stringValue + "\""
       }
     case "int":
       if intValue, ok := data.Value.(int); ok {
