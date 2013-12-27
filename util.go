@@ -4,6 +4,7 @@ package cirruGopher
 import (
   "fmt"
   "encoding/json"
+  "strings"
 )
 
 func stringifyObject(data Object) string {
@@ -30,8 +31,26 @@ func stringifyObject(data Object) string {
         }
         return "#f"
       }
-    case "array": return "::array::"
-    case "map": return "::map::"
+    case "array":
+      list := []string{}
+      if anArray, ok := data.Value.([]Object); ok {
+        for _, item := range anArray {
+          list = append(list, stringifyObject(item))
+        }
+      }
+      stringValue := strings.Join(list, ", ")
+      return "[" + stringValue + "]"
+    case "map":
+      list := []string{}
+      // debugPrint("string is", data.Value)
+      if aMap, ok := data.Value.(*map[string]Object); ok {
+        for key, value := range *aMap {
+          hold := "\"" + key + "\": " + stringifyObject(value)
+          list = append(list, hold)
+        }
+      }
+      stringValue := strings.Join(list, ", ")
+      return "{" + stringValue + "}"
     default: return "<unknown>"
   }
   return ""

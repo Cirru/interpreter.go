@@ -25,14 +25,18 @@ func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
   if token, ok := head.(cirru.Token); ok {
     // debugPrint(token.Text)
     switch token.Text {
-    case "echo":      ret = cirruEcho    (env, codeLine[1:])
+    case "array": ret = cirruArray   (env, codeLine[1:])
+    case "bool": ret = cirruBool(env, codeLine[1:])
+    case "echo": ret = cirruEcho(env, codeLine[1:])
+    case "float": ret = cirruFloat(env, codeLine[1:])
+    case "get": ret = cirruGet(env, codeLine[1:])
+    case "int": ret = cirruInt(env, codeLine[1:])
+    case "map": ret = cirruMap(env, codeLine[1:])
+    case "print": ret = cirruPrint(env, codeLine[1:])
+    case "set": ret = cirruSet(env, codeLine[1:])
+    case "string": ret = cirruString(env, codeLine[1:])
     case "to-string": ret = cirruToString(env, codeLine[1:])
-    case "string":    ret = cirruString  (env, codeLine[1:])
-    case "get":       ret = cirruGet     (env, codeLine[1:])
-    case "set":       ret = cirruSet     (env, codeLine[1:])
-    case "int":       ret = cirruInt     (env, codeLine[1:])
-    case "print":     ret = cirruPrint   (env, codeLine[1:])
-    case "bool":      ret = cirruBool    (env, codeLine[1:])
+    case "type": ret = cirruType(env, codeLine[1:])
     }
     return
   }

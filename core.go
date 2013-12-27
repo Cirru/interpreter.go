@@ -97,7 +97,7 @@ func cirruSet(env *Env, xs cirru.List) (ret Object) {
 func cirruGet(env *Env, xs cirru.List) (ret Object) {
   if token, ok := xs[0].(cirru.Token); ok {
     ret = (*env)[token.Text]
-    println("get...", ret.Tag)
+    // println("get...", ret.Tag)
     return
   }
   if list, ok := xs[0].(cirru.List); ok {
@@ -119,5 +119,59 @@ func cirruBool(env *Env, xs cirru.List) (ret Object) {
     }
     return
   }
+  return
+}
+
+func cirruFloat(env *Env, xs cirru.List) (ret Object) {
+  if token, ok := xs[0].(cirru.Token); ok {
+    floatNumber, err := strconv.ParseFloat(token.Text, 64)
+    if err != nil {
+      panic(err)
+    }
+    ret.Tag = "float"
+    ret.Value = floatNumber
+  }
+  return
+}
+
+func cirruType(env *Env, xs cirru.List) (ret Object) {
+  value := cirruGet(env, xs[0:1])
+  if &value != nil {
+    ret.Tag = "string"
+    ret.Value = value.Tag
+  }
+  return
+}
+
+func cirruArray(env *Env, xs cirru.List) (ret Object) {
+  ret.Tag = "array"
+  hold := []Object{}
+  for _, item := range xs {
+    list := cirru.List{item}
+    hold = append(hold, cirruGet(env, list))
+  }
+  tmp := []interface{}{}
+  tmp = append(tmp, &hold)
+  ret.Value = tmp[0]
+  return
+}
+
+func cirruMap(env *Env, xs cirru.List) (ret Object) {
+  ret.Tag = "map"
+  hold := map[string]Object{}
+  for _, item := range xs {
+    if pair, ok := item.(cirru.List); ok {
+      name := pair[0]
+      var key string
+      if token, ok := name.(cirru.Token); ok {
+        key = token.Text
+      }
+      value := cirruGet(env, pair[1:2])
+      hold[key] = value
+    }
+  }
+  tmp := []interface{}{}
+  tmp = append(tmp, &hold)
+  ret.Value = tmp[0]
   return
 }
