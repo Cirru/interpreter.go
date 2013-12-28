@@ -96,8 +96,19 @@ func cirruSet(env *Env, xs cirru.List) (ret Object) {
 
 func cirruGet(env *Env, xs cirru.List) (ret Object) {
   if token, ok := xs[0].(cirru.Token); ok {
-    ret = (*env)[token.Text]
-    // println("get...", ret.Tag)
+    if value, ok := (*env)[token.Text]; ok {
+      ret = value
+      return
+    } else {
+      if parent, ok := (*env)["parent"]; ok {
+        if parent.Tag == "map" {
+          if scope, ok := parent.Value.(*Env); ok {
+            ret = cirruGet(scope, xs[0:1])
+            return
+          }
+        }
+      }
+    }
     return
   }
   if list, ok := xs[0].(cirru.List); ok {
@@ -158,7 +169,7 @@ func cirruArray(env *Env, xs cirru.List) (ret Object) {
 
 func cirruMap(env *Env, xs cirru.List) (ret Object) {
   ret.Tag = "map"
-  hold := map[string]Object{}
+  hold := Env{}
   for _, item := range xs {
     if pair, ok := item.(cirru.List); ok {
       name := pair[0]
@@ -173,5 +184,32 @@ func cirruMap(env *Env, xs cirru.List) (ret Object) {
   tmp := []interface{}{}
   tmp = append(tmp, &hold)
   ret.Value = tmp[0]
+  return
+}
+
+func cirruSelf(env *Env, xs cirru.List) (ret Object) {
+  ret.Tag = "map"
+  ret.Value = &env
+  return
+}
+
+func cirruChild(env *Env, xs cirru.List) (ret Object) {
+  childMap := Env{}
+  childMap["parent"] = cirruSelf(env, xs)
+  ret.Tag = "map"
+  ret.Value = &childMap
+  // debugPrint("ret is:", ret)
+  return
+}
+
+func cirruUnder(env *Env, xs cirru.List) (ret Object) {
+  item := cirruGet(env, xs[0:1])
+  // debugPrint("item is:", item.Value)
+  if scope, ok := item.Value.(*Env); ok {
+    // debugPrint("scope is:", xs[1:])
+    if list, ok := xs[1].(cirru.List); ok {
+      ret = Evaluate(scope, list)
+    }
+  }
   return
 }

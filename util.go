@@ -43,7 +43,7 @@ func stringifyObject(data Object) string {
     case "map":
       list := []string{}
       // debugPrint("string is", data.Value)
-      if aMap, ok := data.Value.(*map[string]Object); ok {
+      if aMap, ok := data.Value.(*Env); ok {
         for key, value := range *aMap {
           hold := "\"" + key + "\": " + stringifyObject(value)
           list = append(list, hold)
@@ -68,4 +68,16 @@ func debugPrint(xs ...interface{}) {
   fmt.Println("")
   fmt.Println(xs)
   fmt.Println(list...)
+}
+
+func generateString(x string) (ret Object) {
+  ret.Tag = "string"
+  ret.Value = x
+  return
+}
+
+func generateMap(m *Env) (ret Object) {
+  ret.Tag = "map"
+  ret.Value = m
+  return
 }
