@@ -4,6 +4,7 @@ package cirruGopher
 import (
   "github.com/jiyinyiyong/cirru-grammar"
   "fmt"
+  "os"
   "encoding/json"
   "strings"
 )
@@ -98,4 +99,9 @@ func codeString(xs cirru.List) (ret string) {
   }
   ret = strings.Join(hold, " ")
   return
+}
+
+func stop(text ...interface{}) {
+  fmt.Println(text...)
+  os.Exit(1)
 }

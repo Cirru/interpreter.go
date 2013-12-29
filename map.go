@@ -43,21 +43,31 @@ func cirruSet(env *Env, xs cirru.List) (ret Object) {
 }
 
 func cirruGet(env *Env, xs cirru.List) (ret Object) {
-  if token, ok := xs[0].(cirru.Token); ok {
-    if value, ok := (*env)[token.Text]; ok {
-      ret = value
-      return
-    } else {
-      if parent, ok := (*env)["parent"]; ok {
-        if parent.Tag == "map" {
+  switch len(xs) {
+  case 1:
+    if token, ok := xs[0].(cirru.Token); ok {
+      if value, ok := (*env)[token.Text]; ok {
+        ret = value
+        return
+      } else {
+        if parent, ok := (*env)["parent"]; ok {
           if scope, ok := parent.Value.(*Env); ok {
             ret = cirruGet(scope, xs[0:1])
             return
           }
         }
       }
+      return
     }
-    return
+  case 2:
+    println("switch 2")
+    item := cirruGet(env, xs[0:1])
+    if scope, ok := item.Value.(*Env); ok {
+      ret = cirruGet(scope, xs[1:2])
+      return
+    }
+  default:
+    stop("length", len(xs), "is not correct")
   }
   if list, ok := xs[0].(cirru.List); ok {
     ret = Evaluate(env, list)

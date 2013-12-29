@@ -15,3 +15,5 @@ under c
     print a
 
 print $ regexp ^use
+
+print $ get c a
