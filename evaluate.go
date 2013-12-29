@@ -38,7 +38,6 @@ func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
     case "self": ret = cirruSelf(env, codeLine[1:])
     case "set": ret = cirruSet(env, codeLine[1:])
     case "string": ret = cirruString(env, codeLine[1:])
-    case "to-string": ret = cirruToString(env, codeLine[1:])
     case "type": ret = cirruType(env, codeLine[1:])
     case "under": ret = cirruUnder(env, codeLine[1:])
     }

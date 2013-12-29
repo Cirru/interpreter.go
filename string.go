@@ -12,7 +12,7 @@ func cirruString(env *Env, xs cirru.List) (ret Object) {
   }
   if list, ok := xs[0].(cirru.List); ok {
     ret.Tag = "string"
-    ret.Value = cirruToString(env, list).Value
+    ret.Value = codeString(list)
   }
   return
 }

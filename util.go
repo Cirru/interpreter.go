@@ -2,6 +2,7 @@
 package cirruGopher
 
 import (
+  "github.com/jiyinyiyong/cirru-grammar"
   "fmt"
   "encoding/json"
   "strings"
@@ -81,5 +82,20 @@ func generateString(x string) (ret Object) {
 func generateMap(m *Env) (ret Object) {
   ret.Tag = "map"
   ret.Value = m
+  return
+}
+
+func codeString(xs cirru.List) (ret string) {
+  hold := []string{}
+  for _, item := range xs {
+    if buffer, ok := item.(cirru.Token); ok {
+      hold = append(hold, buffer.Text)
+    }
+    if list, ok := item.(cirru.List); ok {
+      tmpString := codeString(list)
+      hold = append(hold, "(" + tmpString + ")")
+    }
+  }
+  ret = strings.Join(hold, " ")
   return
 }

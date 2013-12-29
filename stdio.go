@@ -8,7 +8,7 @@ import (
 )
 
 func cirruEcho(env *Env, xs cirru.List) (ret Object) {
-  fmt.Println(cirruToString(env, xs).Value)
+  fmt.Println(codeString(xs))
   return
 }
 
