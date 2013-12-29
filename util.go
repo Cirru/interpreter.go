@@ -16,46 +16,46 @@ func stringifyObject(data Object) string {
   switch data.Tag {
     case "string":
       if stringValue, ok := data.Value.(string); ok {
-        return "\"" + stringValue + "\""
+        return "(string \"" + stringValue + "\")"
       }
     case "int":
       if intValue, ok := data.Value.(int); ok {
-        return fmt.Sprintf("%d", intValue)
+        return "(int " + fmt.Sprintf("%d", intValue) + ")"
       }
     case "float":
       if floatValue, ok := data.Value.(float64); ok {
-        return fmt.Sprintf("%g", floatValue)
+        return "(float " + fmt.Sprintf("%g", floatValue) + ")"
       }
     case "bool":
       if value, ok := data.Value.(bool); ok {
         if value {
-          return "#t"
+          return "(bool true)"
         }
-        return "#f"
+        return "(bool false)"
       }
     case "array":
       list := []string{}
-      if anArray, ok := data.Value.([]Object); ok {
-        for _, item := range anArray {
+      if anArray, ok := data.Value.(*[]Object); ok {
+        for _, item := range *anArray {
           list = append(list, stringifyObject(item))
         }
       }
-      stringValue := strings.Join(list, ", ")
-      return "[" + stringValue + "]"
+      stringValue := strings.Join(list, " ")
+      return "(array " + stringValue + ")"
     case "map":
       list := []string{}
       // debugPrint("string is", data.Value)
       if aMap, ok := data.Value.(*Env); ok {
         for key, value := range *aMap {
-          hold := "\"" + key + "\": " + stringifyObject(value)
+          hold := "(\"" + key + "\" " + stringifyObject(value) + ")"
           list = append(list, hold)
         }
       }
-      stringValue := strings.Join(list, ", ")
-      return "{" + stringValue + "}"
+      stringValue := strings.Join(list, " ")
+      return "(map " + stringValue + ")"
     case "regexp":
-      return fmt.Sprintf("%s", data.Value)
-    default: return "<unknown>"
+      return "(regexp " + fmt.Sprintf("%s", data.Value) + ")"
+    default: return "(unknown)"
   }
   return ""
 }
