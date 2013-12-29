@@ -6,6 +6,7 @@ import (
   "strings"
   "fmt"
   "strconv"
+  "regexp"
 )
 
 func cirruEcho(env *Env, xs cirru.List) (ret Object) {
@@ -212,6 +213,18 @@ func cirruUnder(env *Env, xs cirru.List) (ret Object) {
     }
   } else {
     debugPrint("no scope", item.Value, xs[1:])
+  }
+  return
+}
+
+func cirruRegexp(env *Env, xs cirru.List) (ret Object) {
+  if token, ok := xs[0].(cirru.Token); ok {
+    reg, err := regexp.Compile(token.Text);
+    if err != nil {
+      panic(err)
+    }
+    ret.Tag = "regexp"
+    ret.Value = reg
   }
   return
 }

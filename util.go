@@ -51,6 +51,8 @@ func stringifyObject(data Object) string {
       }
       stringValue := strings.Join(list, ", ")
       return "{" + stringValue + "}"
+    case "regexp":
+      return fmt.Sprintf("%s", data.Value)
     default: return "<unknown>"
   }
   return ""

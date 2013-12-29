@@ -13,3 +13,5 @@ set c (child)
 under c
   under parent
     print a
+
+print $ regexp ^use

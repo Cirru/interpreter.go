@@ -34,6 +34,7 @@ func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
     case "int": ret = cirruInt(env, codeLine[1:])
     case "map": ret = cirruMap(env, codeLine[1:])
     case "print": ret = cirruPrint(env, codeLine[1:])
+    case "regexp": ret = cirruRegexp(env, codeLine[1:])
     case "self": ret = cirruSelf(env, codeLine[1:])
     case "set": ret = cirruSet(env, codeLine[1:])
     case "string": ret = cirruString(env, codeLine[1:])
