@@ -15,3 +15,11 @@ set c x (int 3)
 print $ get c x
 
 print $ code a
+
+set just-print $ code
+  print a
+
+print just-print
+
+eval (self) just-print
+eval just-print

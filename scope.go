@@ -41,3 +41,28 @@ func cirruCode(env *Env, xs cirru.List) (ret Object) {
   ret.Value = &xs
   return
 }
+
+func cirruEval(env *Env, xs cirru.List) (ret Object) {
+  switch len(xs) {
+  case 1:
+    if code, ok := cirruGet(env, xs[0:1]).Value.(*cirru.List); ok {
+      for _, line := range *code {
+        if codeLine, ok := line.(cirru.List); ok {
+          ret = Evaluate(env, codeLine)
+          return
+        }
+      }
+    }
+  case 2:
+    if scope, ok := cirruGet(env, xs[0:1]).Value.(*Env); ok {
+      if code, ok := cirruGet(env, xs[1:2]).Value.(*cirru.List); ok {
+        for _, line := range *code {
+          if codeLine, ok := line.(cirru.List); ok {
+            ret = Evaluate(scope, codeLine)
+          }
+        }
+      }
+    }
+  }
+  return
+}
