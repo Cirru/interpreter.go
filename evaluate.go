@@ -26,7 +26,9 @@ func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
     // debugPrint(token.Text)
     switch token.Text {
     case "array": ret = cirruArray   (env, codeLine[1:])
+    case "block": ret = cirruBlock(env, codeLine[1:])
     case "bool": ret = cirruBool(env, codeLine[1:])
+    case "call": ret = cirruCall(env, codeLine[1:])
     case "child": ret = cirruChild(env, codeLine[1:])
     case "code": ret = cirruCode(env, codeLine[1:])
     case "echo": ret = cirruEcho(env, codeLine[1:])

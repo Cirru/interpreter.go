@@ -10,7 +10,7 @@ import (
 
 // Interpret takes result from `cirru.Parse` and run in context.
 func Interpret() error {
-  filename := "code/scope.cr"
+  filename := "code/block.cr"
   codeByte, err := ioutil.ReadFile(filename)
   if err != nil {
     panic(err)
