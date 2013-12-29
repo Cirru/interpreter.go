@@ -5,3 +5,10 @@ print $ map
   c $ map
     int 1
     array (int 4)
+
+set m $ map
+  a $ int 1
+
+set m b $ int 2
+
+print m

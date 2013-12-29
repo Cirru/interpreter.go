@@ -55,9 +55,13 @@ func stringifyObject(data Object) string {
       return "(map " + stringValue + ")"
     case "regexp":
       return "(regexp " + fmt.Sprintf("%s", data.Value) + ")"
+    case "code":
+      if code, ok := data.Value.(*cirru.List); ok {
+        return "(code " + codeString(*code) + ")"
+      }
     default: return "(unknown)"
   }
-  return ""
+  return "(no-type)"
 }
 
 func debugPrint(xs ...interface{}) {

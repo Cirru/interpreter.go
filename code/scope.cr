@@ -13,3 +13,5 @@ print $ get c a
 
 set c x (int 3)
 print $ get c x
+
+print $ code a

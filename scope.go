@@ -35,3 +35,9 @@ func cirruUnder(env *Env, xs cirru.List) (ret Object) {
   }
   return
 }
+
+func cirruCode(env *Env, xs cirru.List) (ret Object) {
+  ret.Tag = "code"
+  ret.Value = &xs
+  return
+}
