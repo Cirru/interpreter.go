@@ -181,15 +181,13 @@ func cirruMap(env *Env, xs cirru.List) (ret Object) {
       hold[key] = value
     }
   }
-  tmp := []interface{}{}
-  tmp = append(tmp, &hold)
-  ret.Value = tmp[0]
+  ret.Value = &hold
   return
 }
 
 func cirruSelf(env *Env, xs cirru.List) (ret Object) {
   ret.Tag = "map"
-  ret.Value = &env
+  ret.Value = env
   return
 }
 
@@ -198,7 +196,7 @@ func cirruChild(env *Env, xs cirru.List) (ret Object) {
   childMap["parent"] = cirruSelf(env, xs)
   ret.Tag = "map"
   ret.Value = &childMap
-  // debugPrint("ret is:", ret)
+  println("ret is:", ret.Value)
   return
 }
 
@@ -206,10 +204,14 @@ func cirruUnder(env *Env, xs cirru.List) (ret Object) {
   item := cirruGet(env, xs[0:1])
   // debugPrint("item is:", item.Value)
   if scope, ok := item.Value.(*Env); ok {
-    // debugPrint("scope is:", xs[1:])
-    if list, ok := xs[1].(cirru.List); ok {
-      ret = Evaluate(scope, list)
+    debugPrint("scope is:", xs[1])
+    for _, exp := range xs[1:] {
+      if list, ok := exp.(cirru.List); ok {
+        ret = Evaluate(scope, list)
+      }
     }
+  } else {
+    debugPrint("no scope", item.Value, xs[1:])
   }
   return
 }

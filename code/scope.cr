@@ -11,4 +11,5 @@ set a (int 2)
 set c (child)
 
 under c
-  print parent
+  under parent
+    print a
