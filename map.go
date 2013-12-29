@@ -24,20 +24,30 @@ func cirruMap(env *Env, xs cirru.List) (ret Object) {
 }
 
 func cirruSet(env *Env, xs cirru.List) (ret Object) {
-  // debugPrint("cirruSet:", xs)
-  value := cirruGet(env, xs[1:2])
-  if token, ok := xs[0].(cirru.Token); ok {
-    (*env)[token.Text] = value
-    return value
-  }
-  if list, ok := xs[0].(cirru.List); ok {
-    variable := cirruGet(env, list[0:1])
-    if variable.Tag == "string" {
-      if name, ok := variable.Value.(string); ok {
-        (*env)[name] = value
-        return value
+  switch len(xs) {
+  case 2:
+    value := cirruGet(env, xs[1:2])
+    if token, ok := xs[0].(cirru.Token); ok {
+      (*env)[token.Text] = value
+      return value
+    }
+    if list, ok := xs[0].(cirru.List); ok {
+      variable := cirruGet(env, list[0:1])
+      if variable.Tag == "string" {
+        if name, ok := variable.Value.(string); ok {
+          (*env)[name] = value
+          return value
+        }
       }
     }
+  case 3:
+    hold := cirruGet(env, xs[0:1])
+    if scope, ok := hold.Value.(*Env); ok {
+      ret = cirruSet(scope, xs[1:3])
+      return
+    }
+  default:
+    stop("parameter length not correct for set")
   }
   return
 }
@@ -60,7 +70,6 @@ func cirruGet(env *Env, xs cirru.List) (ret Object) {
       return
     }
   case 2:
-    println("switch 2")
     item := cirruGet(env, xs[0:1])
     if scope, ok := item.Value.(*Env); ok {
       ret = cirruGet(scope, xs[1:2])

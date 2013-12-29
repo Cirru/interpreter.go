@@ -17,3 +17,6 @@ under c
 print $ regexp ^use
 
 print $ get c a
+
+set c x (int 3)
+print $ get c x
