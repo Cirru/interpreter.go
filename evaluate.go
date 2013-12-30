@@ -2,7 +2,7 @@
 package cirruGopher
 
 import (
-  "github.com/jiyinyiyong/cirru-grammar"
+  "github.com/Cirru/cirru-grammar"
 )
 
 type Object struct {

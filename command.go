@@ -5,7 +5,7 @@ package cirruGopher
 
 import (
   "io/ioutil"
-  "github.com/jiyinyiyong/cirru-grammar"
+  "github.com/Cirru/cirru-grammar"
 )
 
 // Interpret takes result from `cirru.Parse` and run in context.
