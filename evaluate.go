@@ -25,7 +25,8 @@ func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
   if token, ok := head.(cirru.Token); ok {
     // debugPrint(token.Text)
     switch token.Text {
-    case "array": ret = cirruArray   (env, codeLine[1:])
+    case "--": ret = cirruComment (env, codeLine[1:])
+    case "array": ret = cirruArray (env, codeLine[1:])
     case "block": ret = cirruBlock(env, codeLine[1:])
     case "bool": ret = cirruBool(env, codeLine[1:])
     case "call": ret = cirruCall(env, codeLine[1:])
@@ -39,6 +40,7 @@ func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
     case "map": ret = cirruMap(env, codeLine[1:])
     case "print": ret = cirruPrint(env, codeLine[1:])
     case "regexp": ret = cirruRegexp(env, codeLine[1:])
+    case "require": ret = cirruRequire(env, codeLine[1:])
     case "self": ret = cirruSelf(env, codeLine[1:])
     case "set": ret = cirruSet(env, codeLine[1:])
     case "string": ret = cirruString(env, codeLine[1:])

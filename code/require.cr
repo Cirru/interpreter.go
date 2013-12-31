@@ -1,2 +1,2 @@
 
-require features/log
+require ./stdio.cr

@@ -10,17 +10,25 @@ import (
 
 // Interpret takes result from `cirru.Parse` and run in context.
 func Interpret() error {
-  filename := "code/block.cr"
-  codeByte, err := ioutil.ReadFile(filename)
+  moduleCenter = Env{}
+  filepath := "code/require.cr"
+  scope := Env{}
+  exports := Env{}
+  scope["filepath"] = generateString(filepath)
+  ret := generateMap(&exports)
+  scope["exports"] = ret
+  moduleCenter[filepath] = ret
+  
+  codeByte, err := ioutil.ReadFile(filepath)
   if err != nil {
     panic(err)
   }
   code := string(codeByte)
-  ast := cirru.Parse(code, filename)
-  globalEnv := Env{}
+  ast := cirru.Parse(code, filepath)
+
   for _, line := range ast {
     if list, ok := line.(cirru.List); ok {
-      Evaluate(&globalEnv, list)
+      Evaluate(&scope, list)
     }
   }
   return nil

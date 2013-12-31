@@ -12,6 +12,10 @@ func cirruEcho(env *Env, xs cirru.List) (ret Object) {
   return
 }
 
+func cirruComment(env *Env, xs cirru.List) (ret Object) {
+  return
+}
+
 func cirruPrint(env *Env, xs cirru.List) (ret Object) {
   outList := []string{}
   for _, value := range xs {
