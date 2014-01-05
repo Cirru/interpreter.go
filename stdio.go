@@ -32,6 +32,6 @@ func cirruPrint(env *Env, xs cirru.List) (ret Object) {
       outList = append(outList, unit)
     }
   }
-  fmt.Println(strings.Join(outList, " "))
+  fmt.Println(strings.Join(outList, "\t"))
   return
 }

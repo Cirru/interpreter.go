@@ -9,9 +9,8 @@ import (
 )
 
 // Interpret takes result from `cirru.Parse` and run in context.
-func Interpret() error {
+func Interpret(filepath string) error {
   moduleCenter = Env{}
-  filepath := "code/scope.cr"
   scope := Env{}
   exports := Env{}
   scope["filepath"] = generateString(filepath)
