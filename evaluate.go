@@ -32,7 +32,6 @@ func Evaluate(env *Env, codeLine cirru.List) (ret Object) {
     case "call": ret = cirruCall(env, codeLine[1:])
     case "child": ret = cirruChild(env, codeLine[1:])
     case "code": ret = cirruCode(env, codeLine[1:])
-    case "echo": ret = cirruEcho(env, codeLine[1:])
     case "eval": ret = cirruEval(env, codeLine[1:])
     case "float": ret = cirruFloat(env, codeLine[1:])
     case "get": ret = cirruGet(env, codeLine[1:])

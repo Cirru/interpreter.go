@@ -7,11 +7,6 @@ import (
   "strings"
 )
 
-func cirruEcho(env *Env, xs cirru.List) (ret Object) {
-  fmt.Println(codeString(xs, 0))
-  return
-}
-
 func cirruComment(env *Env, xs cirru.List) (ret Object) {
   return
 }
@@ -32,6 +27,6 @@ func cirruPrint(env *Env, xs cirru.List) (ret Object) {
       outList = append(outList, unit)
     }
   }
-  fmt.Println(strings.Join(outList, "\t"))
+  fmt.Println(strings.Join(outList, "\n"))
   return
 }

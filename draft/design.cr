@@ -66,7 +66,6 @@ match
 -- stdio
 
 print
-echo
 
 -- others
 
