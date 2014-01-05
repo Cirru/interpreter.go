@@ -11,7 +11,7 @@ import (
 // Interpret takes result from `cirru.Parse` and run in context.
 func Interpret() error {
   moduleCenter = Env{}
-  filepath := "code/require.cr"
+  filepath := "code/scope.cr"
   scope := Env{}
   exports := Env{}
   scope["filepath"] = generateString(filepath)

@@ -14,7 +14,24 @@ print $ get c a
 set c x (int 3)
 print $ get c x
 
-print $ code a
+print $ code
+  set a 1
+  print (get a)
+  print $ array
+    int a
+    array
+      int a
+
+set container (map)
+set container code $ code
+  set a 1
+  print (get a)
+  print $ array
+    int a
+    array
+      int a
+
+print container
 
 set just-print $ code
   print a
