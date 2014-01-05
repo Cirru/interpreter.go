@@ -20,9 +20,7 @@ func Evaluate(env *Env, xs cirru.List) (ret Object) {
     return emptyArray
   }
 
-  head := xs[0]
-
-  if token, ok := head.(cirru.Token); ok {
+  if token, ok := xs[0].(cirru.Token); ok {
     // debugPrint(token.Text)
     switch token.Text {
     case "--": ret = cirruComment (env, xs[1:])
@@ -46,12 +44,11 @@ func Evaluate(env *Env, xs cirru.List) (ret Object) {
     case "type": ret = cirruType(env, xs[1:])
     case "under": ret = cirruUnder(env, xs[1:])
     default:
-      stop(token.Text, "not found")
       ret = userCall(env, xs)
     }
     return
   }
-  if headExpression, ok := head.(cirru.List); ok {
+  if headExpression, ok := xs[0].(cirru.List); ok {
     debugPrint(headExpression)
     return
   }
@@ -59,5 +56,9 @@ func Evaluate(env *Env, xs cirru.List) (ret Object) {
 }
 
 func userCall(env *Env, xs cirru.List) (ret Object) {
+  head := cirruGet(env, xs[0:1])
+  if head.Tag == "block" {
+    ret = cirruCall(env, xs)
+  }
   return
 }
