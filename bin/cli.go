@@ -2,7 +2,7 @@
 package main
 
 import (
-  "github.com/Cirru/cirru-gopher"
+  "github.com/Cirru/cirru-interpreter.go"
   "os"
   "fmt"
 )

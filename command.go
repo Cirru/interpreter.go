@@ -1,11 +1,11 @@
 
 // Package cirruGopher is a small interpreter of Cirru.
-// It is based on `cirru-grammar`.
+// It is based on `cirru-parser.go`.
 package cirruGopher
 
 import (
   "io/ioutil"
-  "github.com/Cirru/cirru-grammar"
+  "github.com/Cirru/cirru-parser.go"
 )
 
 // Interpret takes result from `cirru.Parse` and run in context.

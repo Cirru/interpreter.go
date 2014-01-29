@@ -2,7 +2,7 @@
 package cirruGopher
 
 import (
-  "github.com/Cirru/cirru-grammar"
+  "github.com/Cirru/cirru-parser.go"
   "path"
   "os"
   "io/ioutil"
