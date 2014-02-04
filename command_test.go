@@ -7,9 +7,9 @@ import (
 )
 
 func TestCommand(t *testing.T) {
-  files, _ := ioutil.ReadDir("code/")
+  files, _ := ioutil.ReadDir("cirru/")
   for _, file := range files {
-    filepath := path.Join("code/", file.Name())
+    filepath := path.Join("cirru/", file.Name())
     println()
     println("---> Running for:", filepath)
     println()
