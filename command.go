@@ -1,14 +1,14 @@
 
-// Package cirruGopher is a small interpreter of Cirru.
-// It is based on `cirru-parser.go`.
-package cirruGopher
+// Package cirruGopher is a small interpreter of parser.
+// It is based on `parser`.
+package interpreter
 
 import (
   "io/ioutil"
-  "github.com/Cirru/cirru-parser.go"
+  "github.com/Cirru/parser"
 )
 
-// Interpret takes result from `cirru.Parse` and run in context.
+// Interpret takes result from `parser.Parse` and run in context.
 func Interpret(filepath string) error {
   moduleCenter = Env{}
   scope := Env{}
@@ -17,16 +17,23 @@ func Interpret(filepath string) error {
   ret := generateMap(&exports)
   scope["exports"] = ret
   moduleCenter[filepath] = ret
-  
+
   codeByte, err := ioutil.ReadFile(filepath)
   if err != nil {
     panic(err)
   }
-  code := string(codeByte)
-  ast := cirru.Parse(code, filepath)
+
+  p := parser.NewParser()
+  p.Filename(filepath)
+  for _, c := range codeByte {
+    p.Read(rune(c))
+  }
+  p.Complete()
+
+  ast := p.ToArray()
 
   for _, line := range ast {
-    if list, ok := line.(cirru.List); ok {
+    if list, ok := line.([]interface{}); ok {
       Evaluate(&scope, list)
     }
   }

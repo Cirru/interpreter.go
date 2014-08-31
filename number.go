@@ -1,13 +1,13 @@
 
-package cirruGopher
+package interpreter
 
 import (
-  "github.com/Cirru/cirru-parser.go"
+  "github.com/Cirru/parser"
   "strconv"
 )
 
-func cirruInt(env *Env, xs cirru.List) (ret Object) {
-  if token, ok := xs[0].(cirru.Token); ok {
+func cirruInt(env *Env, xs []interface{}) (ret Object) {
+  if token, ok := xs[0].(parser.Token); ok {
     intNumber, err := strconv.Atoi(token.Text)
     if err != nil {
       panic(err)
@@ -18,8 +18,8 @@ func cirruInt(env *Env, xs cirru.List) (ret Object) {
   return
 }
 
-func cirruFloat(env *Env, xs cirru.List) (ret Object) {
-  if token, ok := xs[0].(cirru.Token); ok {
+func cirruFloat(env *Env, xs []interface{}) (ret Object) {
+  if token, ok := xs[0].(parser.Token); ok {
     floatNumber, err := strconv.ParseFloat(token.Text, 64)
     if err != nil {
       panic(err)

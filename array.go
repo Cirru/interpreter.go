@@ -1,15 +1,11 @@
 
-package cirruGopher
+package interpreter
 
-import (
-  "github.com/Cirru/cirru-parser.go"
-)
-
-func cirruArray(env *Env, xs cirru.List) (ret Object) {
+func cirruArray(env *Env, xs []interface{}) (ret Object) {
   ret.Tag = "array"
   hold := []Object{}
   for _, item := range xs {
-    list := cirru.List{item}
+    list := []interface{}{item}
     hold = append(hold, cirruGet(env, list))
   }
   tmp := []interface{}{}

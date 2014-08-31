@@ -1,16 +1,16 @@
 
-package cirruGopher
+package interpreter
 
 import (
-  "github.com/Cirru/cirru-parser.go"
+  "github.com/Cirru/parser"
 )
 
-func cirruString(env *Env, xs cirru.List) (ret Object) {
-  if token, ok := xs[0].(cirru.Token); ok {
+func cirruString(env *Env, xs []interface{}) (ret Object) {
+  if token, ok := xs[0].(parser.Token); ok {
     ret.Tag = "string"
     ret.Value = token.Text
   }
-  if list, ok := xs[0].(cirru.List); ok {
+  if list, ok := xs[0].([]interface{}); ok {
     ret.Tag = "string"
     ret.Value = codeString(list, 0)
   }

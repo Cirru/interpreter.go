@@ -1,8 +1,8 @@
 
-package cirruGopher
+package interpreter
 
 import (
-  "github.com/Cirru/cirru-parser.go"
+  "github.com/Cirru/parser"
 )
 
 type Object struct {
@@ -13,14 +13,14 @@ type Object struct {
 type Env map[string]Object
 
 // Evaluate read expressions and return a single result
-func Evaluate(env *Env, xs cirru.List) (ret Object) {
+func Evaluate(env *Env, xs []interface{}) (ret Object) {
   // debugPrint(xs, *env)
   if len(xs) == 0 {
     emptyArray := Object{"list", xs}
     return emptyArray
   }
 
-  if token, ok := xs[0].(cirru.Token); ok {
+  if token, ok := xs[0].(parser.Token); ok {
     // debugPrint(token.Text)
     switch token.Text {
     case "--": ret = cirruComment (env, xs[1:])
@@ -48,14 +48,14 @@ func Evaluate(env *Env, xs cirru.List) (ret Object) {
     }
     return
   }
-  if headExpression, ok := xs[0].(cirru.List); ok {
+  if headExpression, ok := xs[0].([]interface{}); ok {
     debugPrint(headExpression)
     return
   }
   return
 }
 
-func userCall(env *Env, xs cirru.List) (ret Object) {
+func userCall(env *Env, xs []interface{}) (ret Object) {
   head := cirruGet(env, xs[0:1])
   if head.Tag == "block" {
     ret = cirruCall(env, xs)

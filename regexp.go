@@ -1,13 +1,13 @@
 
-package cirruGopher
+package interpreter
 
 import (
-  "github.com/Cirru/cirru-parser.go"
+  "github.com/Cirru/parser"
   "regexp"
 )
 
-func cirruRegexp(env *Env, xs cirru.List) (ret Object) {
-  if token, ok := xs[0].(cirru.Token); ok {
+func cirruRegexp(env *Env, xs []interface{}) (ret Object) {
+  if token, ok := xs[0].(parser.Token); ok {
     reg, err := regexp.Compile(token.Text);
     if err != nil {
       panic(err)

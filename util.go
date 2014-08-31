@@ -1,10 +1,9 @@
 
-package cirruGopher
+package interpreter
 
 import (
-  "github.com/Cirru/cirru-parser.go"
+  "github.com/Cirru/parser"
   "fmt"
-  "os"
   "encoding/json"
   "strings"
 )
@@ -63,7 +62,7 @@ func stringifyObject(data Object, level int) string {
     case "regexp":
       return "regexp " + fmt.Sprintf("%s", data.Value)
     case "code":
-      if code, ok := data.Value.(*cirru.List); ok {
+      if code, ok := data.Value.(*[]interface{}); ok {
         return "code " + codeString(*code, level)
       }
     default: return "unknown"
@@ -97,14 +96,14 @@ func generateMap(m *Env) (ret Object) {
   return
 }
 
-func codeString(xs cirru.List, level int) (ret string) {
+func codeString(xs []interface{}, level int) (ret string) {
   hold := []string{}
   indent := "\n" + repeatBlank(level + 1)
   for _, item := range xs {
-    if buffer, ok := item.(cirru.Token); ok {
+    if buffer, ok := item.(parser.Token); ok {
       hold = append(hold, buffer.Text)
     }
-    if list, ok := item.(cirru.List); ok {
+    if list, ok := item.([]interface{}); ok {
       tmpString := indent + codeString(list, (level + 1))
       hold = append(hold, tmpString)
     }
@@ -115,5 +114,5 @@ func codeString(xs cirru.List, level int) (ret string) {
 
 func stop(text ...interface{}) {
   fmt.Println(text...)
-  os.Exit(1)
+  panic("")
 }

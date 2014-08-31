@@ -1,25 +1,23 @@
 
-package cirruGopher
+package interpreter
 
-import (
-  "github.com/Cirru/cirru-parser.go"
-)
+import "github.com/Cirru/parser"
 
 type context struct {
   env *Env
-  args cirru.List
-  code cirru.List
+  args []interface{}
+  code []interface{}
 }
 
-func cirruBlock(env *Env, xs cirru.List) (ret Object) {
+func cirruBlock(env *Env, xs []interface{}) (ret Object) {
   ret.Tag = "block"
-  if args, ok := xs[0].(cirru.List); ok {
+  if args, ok := xs[0].([]interface{}); ok {
     ret.Value = context{env, args, xs[1:]}
   }
   return
 }
 
-func cirruCall(env *Env, xs cirru.List) (ret Object) {
+func cirruCall(env *Env, xs []interface{}) (ret Object) {
   block := cirruGet(env, xs[0:1])
   // debugPrint("block is", block)
   if block.Tag == "block" {
@@ -28,12 +26,12 @@ func cirruCall(env *Env, xs cirru.List) (ret Object) {
       for i, para := range item.args {
         // println("i is:", i)
         // debugPrint(xs)
-        if token, ok := para.(cirru.Token); ok {
+        if token, ok := para.(parser.Token); ok {
           runtime[token.Text] = cirruGet(env, xs[i+1:i+2])
         }
       }
       for _, line := range item.code {
-        if exp, ok := line.(cirru.List); ok {
+        if exp, ok := line.([]interface{}); ok {
           ret = Evaluate(&runtime, exp)
         }
       }

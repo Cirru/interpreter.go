@@ -1,11 +1,7 @@
 
-package cirruGopher
+package interpreter
 
-import (
-  "github.com/Cirru/cirru-parser.go"
-)
-
-func cirruType(env *Env, xs cirru.List) (ret Object) {
+func cirruType(env *Env, xs []interface{}) (ret Object) {
   value := cirruGet(env, xs[0:1])
   if &value != nil {
     ret.Tag = "string"

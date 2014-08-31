@@ -1,18 +1,18 @@
 
-package cirruGopher
+package interpreter
 
 import (
-  "github.com/Cirru/cirru-parser.go"
+  "github.com/Cirru/parser"
 )
 
-func cirruMap(env *Env, xs cirru.List) (ret Object) {
+func cirruMap(env *Env, xs []interface{}) (ret Object) {
   ret.Tag = "map"
   hold := Env{}
   for _, item := range xs {
-    if pair, ok := item.(cirru.List); ok {
+    if pair, ok := item.([]interface{}); ok {
       name := pair[0]
       var key string
-      if token, ok := name.(cirru.Token); ok {
+      if token, ok := name.(parser.Token); ok {
         key = token.Text
       }
       value := cirruGet(env, pair[1:2])
@@ -23,15 +23,15 @@ func cirruMap(env *Env, xs cirru.List) (ret Object) {
   return
 }
 
-func cirruSet(env *Env, xs cirru.List) (ret Object) {
+func cirruSet(env *Env, xs []interface{}) (ret Object) {
   switch len(xs) {
   case 2:
     value := cirruGet(env, xs[1:2])
-    if token, ok := xs[0].(cirru.Token); ok {
+    if token, ok := xs[0].(parser.Token); ok {
       (*env)[token.Text] = value
       return value
     }
-    if list, ok := xs[0].(cirru.List); ok {
+    if list, ok := xs[0].([]interface{}); ok {
       variable := cirruGet(env, list[0:1])
       if variable.Tag == "string" {
         if name, ok := variable.Value.(string); ok {
@@ -52,10 +52,10 @@ func cirruSet(env *Env, xs cirru.List) (ret Object) {
   return
 }
 
-func cirruGet(env *Env, xs cirru.List) (ret Object) {
+func cirruGet(env *Env, xs []interface{}) (ret Object) {
   switch len(xs) {
   case 1:
-    if token, ok := xs[0].(cirru.Token); ok {
+    if token, ok := xs[0].(parser.Token); ok {
       if value, ok := (*env)[token.Text]; ok {
         ret = value
         return
@@ -78,7 +78,7 @@ func cirruGet(env *Env, xs cirru.List) (ret Object) {
   default:
     stop("length", len(xs), "is not correct")
   }
-  if list, ok := xs[0].(cirru.List); ok {
+  if list, ok := xs[0].([]interface{}); ok {
     ret = Evaluate(env, list)
     return
   }

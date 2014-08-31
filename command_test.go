@@ -1,4 +1,4 @@
-package cirruGopher
+package interpreter
 
 import (
   "testing"

@@ -1,8 +1,8 @@
 
-package cirruGopher
+package interpreter
 
 import (
-  "github.com/Cirru/cirru-parser.go"
+  "github.com/Cirru/parser"
   "path"
   "os"
   "io/ioutil"
@@ -10,8 +10,8 @@ import (
 
 var moduleCenter Env
 
-func cirruRequire(env *Env, xs cirru.List) (ret Object) {
-  if token, ok := xs[0].(cirru.Token); ok {
+func cirruRequire(env *Env, xs []interface{}) (ret Object) {
+  if token, ok := xs[0].(parser.Token); ok {
     name := token.Text
     if cache, ok := moduleCenter[name]; ok {
       ret = cache
@@ -37,11 +37,15 @@ func cirruRequire(env *Env, xs cirru.List) (ret Object) {
       if err != nil {
         panic(err)
       }
-      code := string(codeByte)
-      ast := cirru.Parse(code, filepath)
+      p := parser.NewParser()
+      p.Filename(filepath)
+      for _, c := range codeByte {
+        p.Read(rune(c))
+      }
+      ast := p.ToTree()
 
       for _, line := range ast {
-        if list, ok := line.(cirru.List); ok {
+        if list, ok := line.([]interface{}); ok {
           Evaluate(&scope, list)
         }
       }

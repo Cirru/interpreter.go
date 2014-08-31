@@ -2,7 +2,7 @@
 package main
 
 import (
-  "github.com/Cirru/cirru-interpreter.go"
+  "github.com/Cirru/interpreter"
   "os"
   "fmt"
 )
@@ -14,7 +14,7 @@ func main() {
   }
   first := os.Args[1]
   if _, err := os.Stat(first); err == nil {
-    cirruGopher.Interpret(first)
+    interpreter.Interpret(first)
   } else {
     fmt.Println("Please specify a file")
     os.Exit(1)
