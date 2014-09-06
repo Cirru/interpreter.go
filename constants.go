@@ -11,6 +11,6 @@ const (
   cirruTypeRegexp
   cirruTypeMap
   cirruTypeArray
-  cirruTypeBlock
+  cirruTypeFunction
   cirruTypeCode
 )

@@ -9,8 +9,8 @@ type context struct {
   code []interface{}
 }
 
-func cirruBlock(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = cirruTypeBlock
+func cirruFunction(env *Env, xs []interface{}) (ret Object) {
+  ret.Tag = cirruTypeFunction
   if args, ok := xs[0].([]interface{}); ok {
     ret.Value = context{env, args, xs[1:]}
   }
@@ -18,10 +18,10 @@ func cirruBlock(env *Env, xs []interface{}) (ret Object) {
 }
 
 func cirruCall(env *Env, xs []interface{}) (ret Object) {
-  block := cirruGet(env, xs[0:1])
-  // debugPrint("block is", block)
-  if block.Tag == cirruTypeBlock {
-    if item, ok := block.Value.(context); ok {
+  function := cirruGet(env, xs[0:1])
+  // debugPrint("function is", function)
+  if function.Tag == cirruTypeFunction {
+    if item, ok := function.Value.(context); ok {
       runtime := Env{}
       for i, para := range item.args {
         // println("i is:", i)
@@ -38,7 +38,7 @@ func cirruCall(env *Env, xs []interface{}) (ret Object) {
       return
     }
   } else {
-    stop("not block")
+    stop("not function")
   }
   return
 }

@@ -25,7 +25,7 @@ func Evaluate(env *Env, xs []interface{}) (ret Object) {
     switch token.Text {
     case "--": ret = cirruComment (env, xs[1:])
     case "array": ret = cirruArray (env, xs[1:])
-    case "block": ret = cirruBlock(env, xs[1:])
+    case "function": ret = cirruFunction(env, xs[1:])
     case "bool": ret = cirruBool(env, xs[1:])
     case "call": ret = cirruCall(env, xs[1:])
     case "child": ret = cirruChild(env, xs[1:])
@@ -57,7 +57,7 @@ func Evaluate(env *Env, xs []interface{}) (ret Object) {
 
 func userCall(env *Env, xs []interface{}) (ret Object) {
   head := cirruGet(env, xs[0:1])
-  if head.Tag == cirruTypeBlock {
+  if head.Tag == cirruTypeFunction {
     ret = cirruCall(env, xs)
   }
   return

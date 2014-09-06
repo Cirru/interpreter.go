@@ -13,7 +13,7 @@ func cirruType(env *Env, xs []interface{}) (ret Object) {
     case 4: ret.Value = "regexp"
     case 5: ret.Value = "map"
     case 6: ret.Value = "array"
-    case 7: ret.Value = "block"
+    case 7: ret.Value = "function"
     case 8: ret.Value = "code"
     default: panic("unknow type")
     }
