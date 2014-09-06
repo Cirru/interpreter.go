@@ -3,6 +3,7 @@ package interpreter
 
 import (
   "github.com/Cirru/parser"
+  "fmt"
 )
 
 type Object struct {
@@ -14,14 +15,12 @@ type Env map[string]Object
 
 // Evaluate read expressions and return a single result
 func Evaluate(env *Env, xs []interface{}) (ret Object) {
-  // debugPrint(xs, *env)
   if len(xs) == 0 {
     emptyArray := Object{cirruTypeArray, xs}
     return emptyArray
   }
 
   if token, ok := xs[0].(parser.Token); ok {
-    // debugPrint(token.Text)
     switch token.Text {
     case "--": ret = cirruComment (env, xs[1:])
     case "array": ret = cirruArray (env, xs[1:])
@@ -49,7 +48,7 @@ func Evaluate(env *Env, xs []interface{}) (ret Object) {
     return
   }
   if headExpression, ok := xs[0].([]interface{}); ok {
-    debugPrint(headExpression)
+    fmt.Println(headExpression)
     return
   }
   return

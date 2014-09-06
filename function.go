@@ -19,13 +19,11 @@ func cirruFunction(env *Env, xs []interface{}) (ret Object) {
 
 func cirruCall(env *Env, xs []interface{}) (ret Object) {
   function := cirruGet(env, xs[0:1])
-  // debugPrint("function is", function)
   if function.Tag == cirruTypeFunction {
     if item, ok := function.Value.(context); ok {
       runtime := Env{}
       for i, para := range item.args {
         // println("i is:", i)
-        // debugPrint(xs)
         if token, ok := para.(parser.Token); ok {
           runtime[token.Text] = cirruGet(env, xs[i+1:i+2])
         }

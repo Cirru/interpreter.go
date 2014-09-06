@@ -4,7 +4,6 @@ package interpreter
 import (
   "github.com/Cirru/parser"
   "fmt"
-  "encoding/json"
   "strings"
 )
 
@@ -50,7 +49,6 @@ func stringifyObject(data Object, level int) string {
     case cirruTypeMap:
       list := []string{}
       indent := "\n" + repeatBlank(level + 1)
-      // debugPrint("string is", data.Value)
       if aMap, ok := data.Value.(*Env); ok {
         for key, value := range *aMap {
           hold := "\"" + key + "\" $ " + stringifyObject(value, (level + 1))
@@ -68,20 +66,6 @@ func stringifyObject(data Object, level int) string {
     default: return "unknown"
   }
   return "nil"
-}
-
-func debugPrint(xs ...interface{}) {
-  list := []interface{}{}
-  for _, item := range xs {
-    json, err := json.MarshalIndent(item, "", "  ")
-    if err != nil {
-      panic(err)
-    }
-    list = append(list, interface{}(string(json)))
-  }
-  fmt.Println("")
-  fmt.Println(xs)
-  fmt.Println(list...)
 }
 
 func generateString(x string) (ret Object) {

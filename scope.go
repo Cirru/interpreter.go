@@ -1,6 +1,8 @@
 
 package interpreter
 
+import "fmt"
+
 func cirruSelf(env *Env, xs []interface{}) (ret Object) {
   ret.Tag = cirruTypeMap
   ret.Value = env
@@ -18,16 +20,14 @@ func cirruChild(env *Env, xs []interface{}) (ret Object) {
 
 func cirruUnder(env *Env, xs []interface{}) (ret Object) {
   item := cirruGet(env, xs[0:1])
-  // debugPrint("item is:", item.Value)
   if scope, ok := item.Value.(*Env); ok {
-    // debugPrint("scope is:", xs[1])
     for _, exp := range xs[1:] {
       if list, ok := exp.([]interface{}); ok {
         ret = Evaluate(scope, list)
       }
     }
   } else {
-    debugPrint("no scope", item.Value, xs[1:])
+    fmt.Println("no scope", item.Value, xs[1:])
   }
   return
 }
