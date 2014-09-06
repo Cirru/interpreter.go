@@ -2,7 +2,7 @@
 package interpreter
 
 func cirruArray(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = "array"
+  ret.Tag = cirruTypeArray
   hold := []Object{}
   for _, item := range xs {
     list := []interface{}{item}

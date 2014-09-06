@@ -2,7 +2,7 @@
 package interpreter
 
 func cirruSelf(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = "map"
+  ret.Tag = cirruTypeMap
   ret.Value = env
   return
 }
@@ -10,7 +10,7 @@ func cirruSelf(env *Env, xs []interface{}) (ret Object) {
 func cirruChild(env *Env, xs []interface{}) (ret Object) {
   childMap := Env{}
   childMap["parent"] = cirruSelf(env, xs)
-  ret.Tag = "map"
+  ret.Tag = cirruTypeMap
   ret.Value = &childMap
   // println("ret is:", ret.Value)
   return
@@ -33,7 +33,7 @@ func cirruUnder(env *Env, xs []interface{}) (ret Object) {
 }
 
 func cirruCode(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = "code"
+  ret.Tag = cirruTypeCode
   ret.Value = &xs
   return
 }

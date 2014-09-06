@@ -12,7 +12,7 @@ func cirruInt(env *Env, xs []interface{}) (ret Object) {
     if err != nil {
       panic(err)
     }
-    ret.Tag = "int"
+    ret.Tag = cirruTypeInt
     ret.Value = intNumber
   }
   return
@@ -24,7 +24,7 @@ func cirruFloat(env *Env, xs []interface{}) (ret Object) {
     if err != nil {
       panic(err)
     }
-    ret.Tag = "float"
+    ret.Tag = cirruTypeFloat
     ret.Value = floatNumber
   }
   return

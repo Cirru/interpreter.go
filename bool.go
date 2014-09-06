@@ -6,10 +6,10 @@ import (
 )
 
 func cirruBool(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = "bool"
+  ret.Tag = cirruTypeBool
   ret.Value = false
   if token, ok := xs[0].(parser.Token); ok {
-    trueValues := []string{"true", "yes", "riight", "1"}
+    trueValues := []string{"true", "yes", "right", "1"}
     for _, text := range trueValues {
       if text == token.Text {
         ret.Value = true

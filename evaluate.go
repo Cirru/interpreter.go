@@ -6,7 +6,7 @@ import (
 )
 
 type Object struct {
-  Tag string
+  Tag cirruTypeName
   Value interface{}
 }
 
@@ -16,7 +16,7 @@ type Env map[string]Object
 func Evaluate(env *Env, xs []interface{}) (ret Object) {
   // debugPrint(xs, *env)
   if len(xs) == 0 {
-    emptyArray := Object{"list", xs}
+    emptyArray := Object{cirruTypeArray, xs}
     return emptyArray
   }
 
@@ -57,7 +57,7 @@ func Evaluate(env *Env, xs []interface{}) (ret Object) {
 
 func userCall(env *Env, xs []interface{}) (ret Object) {
   head := cirruGet(env, xs[0:1])
-  if head.Tag == "block" {
+  if head.Tag == cirruTypeBlock {
     ret = cirruCall(env, xs)
   }
   return

@@ -7,11 +7,11 @@ import (
 
 func cirruString(env *Env, xs []interface{}) (ret Object) {
   if token, ok := xs[0].(parser.Token); ok {
-    ret.Tag = "string"
+    ret.Tag = cirruTypeString
     ret.Value = token.Text
   }
   if list, ok := xs[0].([]interface{}); ok {
-    ret.Tag = "string"
+    ret.Tag = cirruTypeString
     ret.Value = codeString(list, 0)
   }
   return

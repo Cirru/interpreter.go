@@ -6,7 +6,7 @@ import (
 )
 
 func cirruMap(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = "map"
+  ret.Tag = cirruTypeMap
   hold := Env{}
   for _, item := range xs {
     if pair, ok := item.([]interface{}); ok {
@@ -33,7 +33,7 @@ func cirruSet(env *Env, xs []interface{}) (ret Object) {
     }
     if list, ok := xs[0].([]interface{}); ok {
       variable := cirruGet(env, list[0:1])
-      if variable.Tag == "string" {
+      if variable.Tag == cirruTypeString {
         if name, ok := variable.Value.(string); ok {
           (*env)[name] = value
           return value

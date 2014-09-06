@@ -18,26 +18,26 @@ func repeatBlank(n int) (ret string) {
 
 func stringifyObject(data Object, level int) string {
   switch data.Tag {
-    case "string":
+    case cirruTypeString:
       if stringValue, ok := data.Value.(string); ok {
         return "string \"" + stringValue + "\""
       }
-    case "int":
+    case cirruTypeInt:
       if intValue, ok := data.Value.(int); ok {
         return "int " + fmt.Sprintf("%d", intValue)
       }
-    case "float":
+    case cirruTypeFloat:
       if floatValue, ok := data.Value.(float64); ok {
         return "float " + fmt.Sprintf("%g", floatValue)
       }
-    case "bool":
+    case cirruTypeBool:
       if value, ok := data.Value.(bool); ok {
         if value {
           return "bool true"
         }
         return "bool false"
       }
-    case "array":
+    case cirruTypeArray:
       list := []string{}
       indent := "\n" + repeatBlank(level + 1)
       if anArray, ok := data.Value.(*[]Object); ok {
@@ -47,7 +47,7 @@ func stringifyObject(data Object, level int) string {
       }
       stringValue := strings.Join(list, indent)
       return "array " + indent + stringValue
-    case "map":
+    case cirruTypeMap:
       list := []string{}
       indent := "\n" + repeatBlank(level + 1)
       // debugPrint("string is", data.Value)
@@ -59,9 +59,9 @@ func stringifyObject(data Object, level int) string {
       }
       stringValue := strings.Join(list, indent)
       return "map " + indent + stringValue
-    case "regexp":
+    case cirruTypeRegexp:
       return "regexp " + fmt.Sprintf("%s", data.Value)
-    case "code":
+    case cirruTypeCode:
       if code, ok := data.Value.(*[]interface{}); ok {
         return "code " + codeString(*code, level)
       }
@@ -85,13 +85,13 @@ func debugPrint(xs ...interface{}) {
 }
 
 func generateString(x string) (ret Object) {
-  ret.Tag = "string"
+  ret.Tag = cirruTypeString
   ret.Value = x
   return
 }
 
 func generateMap(m *Env) (ret Object) {
-  ret.Tag = "map"
+  ret.Tag = cirruTypeMap
   ret.Value = m
   return
 }

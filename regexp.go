@@ -12,7 +12,7 @@ func cirruRegexp(env *Env, xs []interface{}) (ret Object) {
     if err != nil {
       panic(err)
     }
-    ret.Tag = "regexp"
+    ret.Tag = cirruTypeRegexp
     ret.Value = reg
   }
   return
