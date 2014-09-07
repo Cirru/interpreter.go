@@ -6,8 +6,8 @@ import (
   "github.com/Cirru/parser"
 )
 
-func cirruMap(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = cirruTypeMap
+func cirruTable(env *Env, xs []interface{}) (ret Object) {
+  ret.Tag = cirruTypeTable
   hold := Env{}
   for _, item := range xs {
     if pair, ok := item.([]interface{}); ok {

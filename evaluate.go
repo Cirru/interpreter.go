@@ -33,7 +33,7 @@ func Evaluate(env *Env, xs []interface{}) (ret Object) {
     case "float": ret = cirruFloat(env, xs[1:])
     case "get": ret = cirruGet(env, xs[1:])
     case "int": ret = cirruInt(env, xs[1:])
-    case "map": ret = cirruMap(env, xs[1:])
+    case "table": ret = cirruTable(env, xs[1:])
     case "print": ret = cirruPrint(env, xs[1:])
     case "regexp": ret = cirruRegexp(env, xs[1:])
     case "require": ret = cirruRequire(env, xs[1:])

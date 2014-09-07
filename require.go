@@ -29,7 +29,7 @@ func cirruRequire(env *Env, xs []interface{}) (ret Object) {
       scope := Env{}
       exports := Env{}
       scope["filepath"] = generateString(filepath)
-      ret = generateMap(&exports)
+      ret = generateTable(&exports)
       scope["exports"] = ret
       moduleCenter[filepath] = ret
 

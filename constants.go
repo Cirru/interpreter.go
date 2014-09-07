@@ -9,7 +9,7 @@ const (
   cirruTypeBool
   cirruTypeString
   cirruTypeRegexp
-  cirruTypeMap
+  cirruTypeTable
   cirruTypeArray
   cirruTypeFunction
   cirruTypeCode

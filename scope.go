@@ -4,16 +4,16 @@ package interpreter
 import "fmt"
 
 func cirruSelf(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = cirruTypeMap
+  ret.Tag = cirruTypeTable
   ret.Value = env
   return
 }
 
 func cirruChild(env *Env, xs []interface{}) (ret Object) {
-  childMap := Env{}
-  childMap["parent"] = cirruSelf(env, xs)
-  ret.Tag = cirruTypeMap
-  ret.Value = &childMap
+  childTable := Env{}
+  childTable["parent"] = cirruSelf(env, xs)
+  ret.Tag = cirruTypeTable
+  ret.Value = &childTable
   // println("ret is:", ret.Value)
   return
 }

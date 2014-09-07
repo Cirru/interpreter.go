@@ -52,8 +52,8 @@ func transformObject(data Object) []interface{} {
         }
       }
       return list
-    case cirruTypeMap:
-      list := []interface{}{"map"}
+    case cirruTypeTable:
+      list := []interface{}{"table"}
       if value, ok := data.Value.(*Env); ok {
         for k, v := range *value {
           pair := []interface{}{k, transformObject(v)}
@@ -80,8 +80,8 @@ func generateString(x string) (ret Object) {
   return
 }
 
-func generateMap(m *Env) (ret Object) {
-  ret.Tag = cirruTypeMap
+func generateTable(m *Env) (ret Object) {
+  ret.Tag = cirruTypeTable
   ret.Value = m
   return
 }

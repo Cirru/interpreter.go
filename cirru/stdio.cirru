@@ -7,12 +7,12 @@ print (string 1)
 print nothing
 
 print
-  map
+  table
     a (int 4)
-    b $ map
+    b $ table
       a $ int 5
       b $ int 6
-      c $ map
+      c $ table
         int 7
 
 print
@@ -26,7 +26,7 @@ print
 print
   array
     int 1
-    map
+    table
       a $ int 2
       b $ array
         int 3
@@ -43,7 +43,7 @@ print $ code
     array
       int a
 
-set container (map)
+set container (table)
 set container code $ code
   set a 1
   print (get a)
