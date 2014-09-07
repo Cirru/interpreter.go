@@ -2,6 +2,7 @@
 package interpreter
 
 import (
+  "fmt"
   "github.com/Cirru/parser"
 )
 
@@ -47,7 +48,7 @@ func cirruSet(env *Env, xs []interface{}) (ret Object) {
       return
     }
   default:
-    stop("parameter length not correct for set")
+    panic("parameter length not correct for set")
   }
   return
 }
@@ -76,7 +77,7 @@ func cirruGet(env *Env, xs []interface{}) (ret Object) {
       return
     }
   default:
-    stop("length", len(xs), "is not correct")
+    panic(fmt.Sprintf("length %s is not correct", len(xs)))
   }
   if list, ok := xs[0].([]interface{}); ok {
     ret = Evaluate(env, list)

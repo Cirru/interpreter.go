@@ -98,8 +98,3 @@ func transformCode(xs []interface{}) []interface{} {
   }
   return hold
 }
-
-func stop(text ...interface{}) {
-  fmt.Println(text...)
-  panic("")
-}

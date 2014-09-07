@@ -36,7 +36,7 @@ func cirruCall(env *Env, xs []interface{}) (ret Object) {
       return
     }
   } else {
-    stop("not function")
+    panic("not function")
   }
   return
 }
