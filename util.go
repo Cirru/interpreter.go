@@ -3,8 +3,8 @@ package interpreter
 
 import (
   "github.com/Cirru/parser"
+  "github.com/Cirru/writer"
   "fmt"
-  "strings"
 )
 
 func repeatBlank(n int) (ret string) {
@@ -15,57 +15,63 @@ func repeatBlank(n int) (ret string) {
   return
 }
 
-func stringifyObject(data Object, level int) string {
+func stringifyObject(data Object) string {
+  tree := transformObject(data)
+  lines := []interface{}{tree}
+  return writer.MakeCode(lines)
+}
+
+func transformObject(data Object) []interface{} {
   switch data.Tag {
     case cirruTypeString:
       if stringValue, ok := data.Value.(string); ok {
-        return "string \"" + stringValue + "\""
+        return []interface{}{"string", stringValue}
       }
     case cirruTypeInt:
-      if intValue, ok := data.Value.(int); ok {
-        return "int " + fmt.Sprintf("%d", intValue)
+      if value, ok := data.Value.(int); ok {
+        str := fmt.Sprintf("%d", value)
+        return []interface{}{"int", str}
       }
     case cirruTypeFloat:
-      if floatValue, ok := data.Value.(float64); ok {
-        return "float " + fmt.Sprintf("%g", floatValue)
+      if value, ok := data.Value.(float64); ok {
+        str := fmt.Sprintf("%g", value)
+        return []interface{}{"float", str}
       }
     case cirruTypeBool:
       if value, ok := data.Value.(bool); ok {
         if value {
-          return "bool true"
+          return []interface{}{"bool", "true"}
         }
-        return "bool false"
+        return []interface{}{"bool", "false"}
       }
     case cirruTypeArray:
-      list := []string{}
-      indent := "\n" + repeatBlank(level + 1)
-      if anArray, ok := data.Value.(*[]Object); ok {
-        for _, item := range *anArray {
-          list = append(list, stringifyObject(item, (level + 1)))
+      list := []interface{}{"array"}
+      if value, ok := data.Value.(*[]Object); ok {
+        for _, item := range *value {
+          list = append(list, transformObject(item))
         }
       }
-      stringValue := strings.Join(list, indent)
-      return "array " + indent + stringValue
+      return list
     case cirruTypeMap:
-      list := []string{}
-      indent := "\n" + repeatBlank(level + 1)
-      if aMap, ok := data.Value.(*Env); ok {
-        for key, value := range *aMap {
-          hold := "\"" + key + "\" $ " + stringifyObject(value, (level + 1))
-          list = append(list, hold)
+      list := []interface{}{"map"}
+      if value, ok := data.Value.(*Env); ok {
+        for k, v := range *value {
+          pair := []interface{}{k, transformObject(v)}
+          list = append(list, pair)
         }
       }
-      stringValue := strings.Join(list, indent)
-      return "map " + indent + stringValue
+      return list
     case cirruTypeRegexp:
-      return "regexp " + fmt.Sprintf("%s", data.Value)
+      str := fmt.Sprintf("%s", data.Value)
+      return []interface{}{"regexp", str}
     case cirruTypeCode:
-      if code, ok := data.Value.(*[]interface{}); ok {
-        return "code " + codeString(*code, level)
+      if value, ok := data.Value.(*[]interface{}); ok {
+        return []interface{}{"code", transformCode(*value)}
       }
-    default: return "unknown"
+    default:
+      panic("unknown structure")
   }
-  return "nil"
+  return []interface{}{}
 }
 
 func generateString(x string) (ret Object) {
@@ -80,20 +86,17 @@ func generateMap(m *Env) (ret Object) {
   return
 }
 
-func codeString(xs []interface{}, level int) (ret string) {
-  hold := []string{}
-  indent := "\n" + repeatBlank(level + 1)
+func transformCode(xs []interface{}) []interface{} {
+  hold := []interface{}{}
   for _, item := range xs {
     if buffer, ok := item.(parser.Token); ok {
       hold = append(hold, buffer.Text)
     }
     if list, ok := item.([]interface{}); ok {
-      tmpString := indent + codeString(list, (level + 1))
-      hold = append(hold, tmpString)
+      hold = append(hold, transformCode(list))
     }
   }
-  ret = strings.Join(hold, " ")
-  return
+  return hold
 }
 
 func stop(text ...interface{}) {

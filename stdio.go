@@ -17,13 +17,13 @@ func cirruPrint(env *Env, xs []interface{}) (ret Object) {
     if token, ok := value.(parser.Token); ok {
       list := []interface{}{}
       list = append(list, token)
-      unit := stringifyObject(cirruGet(env, list), 0)
+      unit := stringifyObject(cirruGet(env, list))
       outList = append(outList, unit)
     }
     if list, ok := value.([]interface{}); ok {
       calculated := Evaluate(env, list)
       // fmt.Println("value is:", calculated)
-      unit := stringifyObject(calculated, 0)
+      unit := stringifyObject(calculated)
       outList = append(outList, unit)
     }
   }
