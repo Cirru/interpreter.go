@@ -15,36 +15,36 @@ func stringifyunitype(data unitype) string {
 
 func transformunitype(data unitype) []interface{} {
   switch data.Type {
-    case cirruString:
+    case uniString:
       if stringValue, ok := data.Value.(string); ok {
         return []interface{}{"string", stringValue}
       }
-    case cirruInt:
+    case uniInt:
       if value, ok := data.Value.(int); ok {
         str := fmt.Sprintf("%d", value)
         return []interface{}{"int", str}
       }
-    case cirruFloat:
+    case uniFloat:
       if value, ok := data.Value.(float64); ok {
         str := fmt.Sprintf("%g", value)
         return []interface{}{"float", str}
       }
-    case cirruBool:
+    case uniBool:
       if value, ok := data.Value.(bool); ok {
         if value {
           return []interface{}{"bool", "true"}
         }
         return []interface{}{"bool", "false"}
       }
-    case cirruArray:
+    case uniArray:
       list := []interface{}{"array"}
-      if value, ok := data.Value.(*[]unitype); ok {
+      if value, ok := data.Value.(*map[unitype]unitype); ok {
         for _, item := range *value {
           list = append(list, transformunitype(item))
         }
       }
       return list
-    case cirruTable:
+    case uniTable:
       list := []interface{}{"table"}
       if value, ok := data.Value.(*Env); ok {
         for k, v := range *value {
@@ -53,16 +53,16 @@ func transformunitype(data unitype) []interface{} {
         }
       }
       return list
-    case cirruRegexp:
+    case uniRegexp:
       str := fmt.Sprintf("%s", data.Value)
       return []interface{}{"regexp", str}
-    case cirruFn:
+    case uniFn:
       if fnContext, ok := data.Value.(context); ok {
         args := transformCode(fnContext.args)
         code := transformCode(fnContext.code)
         return []interface{}{"fn", args, code}
       }
-    case cirruNil:
+    case uniNil:
       return []interface{}{"nil"}
     default:
       panic("unknown structure")
@@ -71,13 +71,13 @@ func transformunitype(data unitype) []interface{} {
 }
 
 func generateString(x string) (ret unitype) {
-  ret.Type = cirruString
+  ret.Type = uniString
   ret.Value = x
   return
 }
 
 func generateTable(m *Env) (ret unitype) {
-  ret.Type = cirruTable
+  ret.Type = uniTable
   ret.Value = m
   return
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func (env *Env) _bool(xs []interface{}) (ret unitype) {
-  ret.Type = cirruBool
+  ret.Type = uniBool
   ret.Value = false
   if token, ok := xs[0].(parser.Token); ok {
     trueValues := []string{"true", "yes", "right", "1"}

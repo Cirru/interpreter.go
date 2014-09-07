@@ -13,13 +13,13 @@ var moduleCenter Env
 func (env *Env) require(xs []interface{}) (ret unitype) {
   if token, ok := xs[0].(parser.Token); ok {
     name := token.Text
-    if cache, ok := moduleCenter[name]; ok {
+    if cache, ok := moduleCenter[makeUniString(name)]; ok {
       ret = cache
       return
     } else {
       var filepath string
       if name[0] == '.' {
-        if baseFile, ok := (*env)["filepath"].Value.(string); ok {
+        if baseFile, ok := (*env)[makeUniString("filepath")].Value.(string); ok {
           filepath = path.Join(path.Dir(baseFile), name)
         }
       } else {
@@ -28,10 +28,10 @@ func (env *Env) require(xs []interface{}) (ret unitype) {
       }
       scope := Env{}
       exports := Env{}
-      scope["filepath"] = generateString(filepath)
+      scope[makeUniString("filepath")] = generateString(filepath)
       ret = generateTable(&exports)
-      scope["exports"] = ret
-      moduleCenter[filepath] = ret
+      scope[makeUniString("exports")] = ret
+      moduleCenter[makeUniString(filepath)] = ret
 
       codeByte, err := ioutil.ReadFile(filepath)
       if err != nil {

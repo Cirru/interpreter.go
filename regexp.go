@@ -12,7 +12,7 @@ func (env *Env) regexp(xs []interface{}) (ret unitype) {
     if err != nil {
       panic(err)
     }
-    ret.Type = cirruRegexp
+    ret.Type = uniRegexp
     ret.Value = reg
   }
   return

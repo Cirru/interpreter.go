@@ -12,7 +12,7 @@ func (env *Env) _int(xs []interface{}) (ret unitype) {
     if err != nil {
       panic(err)
     }
-    ret.Type = cirruInt
+    ret.Type = uniInt
     ret.Value = intNumber
   }
   return
@@ -24,7 +24,7 @@ func (env *Env) _float(xs []interface{}) (ret unitype) {
     if err != nil {
       panic(err)
     }
-    ret.Type = cirruFloat
+    ret.Type = uniFloat
     ret.Value = floatNumber
   }
   return

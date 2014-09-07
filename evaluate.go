@@ -7,16 +7,16 @@ import (
 )
 
 type unitype struct {
-  Type cirruType
+  Type unitypeName
   Value interface{}
 }
 
-type Env map[string]unitype
+type Env map[unitype]unitype
 
 // Evaluate read expressions and return a single result
 func Evaluate(env *Env, xs []interface{}) (ret unitype) {
   if len(xs) == 0 {
-    emptyArray := unitype{cirruArray, xs}
+    emptyArray := unitype{uniArray, xs}
     return emptyArray
   }
 
@@ -51,7 +51,7 @@ func Evaluate(env *Env, xs []interface{}) (ret unitype) {
 
 func userCall(env *Env, xs []interface{}) (ret unitype) {
   head := env.get(xs[0:1])
-  if head.Type == cirruFn {
+  if head.Type == uniFn {
     ret = env.call(xs)
   }
   return

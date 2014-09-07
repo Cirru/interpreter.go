@@ -4,7 +4,7 @@ package interpreter
 func (env *Env) _type(xs []interface{}) (ret unitype) {
   value := env.get(xs[0:1])
   if &value != nil {
-    ret.Type = cirruString
+    ret.Type = uniString
     switch value.Type {
     case 0: ret.Value = "int"
     case 1: ret.Value = "float"

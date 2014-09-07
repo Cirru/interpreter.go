@@ -7,7 +7,7 @@ import (
 )
 
 func (env *Env) table(xs []interface{}) (ret unitype) {
-  ret.Type = cirruTable
+  ret.Type = uniTable
   hold := Env{}
   for _, item := range xs {
     if pair, ok := item.([]interface{}); ok {
@@ -17,7 +17,7 @@ func (env *Env) table(xs []interface{}) (ret unitype) {
         key = token.Text
       }
       value := env.get(pair[1:2])
-      hold[key] = value
+      hold[makeUniString(key)] = value
     }
   }
   ret.Value = &hold
@@ -29,14 +29,14 @@ func (env *Env) set(xs []interface{}) (ret unitype) {
   case 2:
     value := env.get(xs[1:2])
     if token, ok := xs[0].(parser.Token); ok {
-      (*env)[token.Text] = value
+      (*env)[makeUniString(token.Text)] = value
       return value
     }
     if list, ok := xs[0].([]interface{}); ok {
       variable := env.get(list[0:1])
-      if variable.Type == cirruString {
+      if variable.Type == uniString {
         if name, ok := variable.Value.(string); ok {
-          (*env)[name] = value
+          (*env)[makeUniString(name)] = value
           return value
         }
       }
@@ -57,18 +57,18 @@ func (env *Env) get(xs []interface{}) (ret unitype) {
   switch len(xs) {
   case 1:
     if token, ok := xs[0].(parser.Token); ok {
-      if value, ok := (*env)[token.Text]; ok {
+      if value, ok := (*env)[makeUniString(token.Text)]; ok {
         ret = value
         return
       } else {
-        if parent, ok := (*env)["parent"]; ok {
+        if parent, ok := (*env)[makeUniString("parent")]; ok {
           if scope, ok := parent.Value.(*Env); ok {
             ret = scope.get(xs[0:1])
             return
           }
         }
       }
-      return unitype{cirruNil, nil}
+      return unitype{uniNil, nil}
     }
   case 2:
     item := env.get(xs[0:1])

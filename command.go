@@ -13,10 +13,10 @@ func Interpret(filepath string) error {
   moduleCenter = Env{}
   scope := Env{}
   exports := Env{}
-  scope["filepath"] = generateString(filepath)
+  scope[makeUniString("filepath")] = generateString(filepath)
   ret := generateTable(&exports)
-  scope["exports"] = ret
-  moduleCenter[filepath] = ret
+  scope[makeUniString("exports")] = ret
+  moduleCenter[makeUniString(filepath)] = ret
 
   codeByte, err := ioutil.ReadFile(filepath)
   if err != nil {
