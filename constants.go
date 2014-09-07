@@ -1,17 +1,16 @@
 
 package interpreter
 
-type cirruName int
+type cirruType int
 
 const (
-  cirruInt cirruName = iota
+  cirruInt cirruType = iota
   cirruFloat
   cirruBool
   cirruString
   cirruRegexp
   cirruTable
   cirruArray
-  cirruFunction
-  cirruCode
+  cirruFn
   cirruNil
 )

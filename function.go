@@ -9,8 +9,8 @@ type context struct {
   code []interface{}
 }
 
-func (env *Env) function(xs []interface{}) (ret Object) {
-  ret.Tag = cirruFunction
+func (env *Env) fn(xs []interface{}) (ret Object) {
+  ret.Tag = cirruFn
   if args, ok := xs[0].([]interface{}); ok {
     ret.Value = context{env, args, xs[1:]}
   }
@@ -18,9 +18,9 @@ func (env *Env) function(xs []interface{}) (ret Object) {
 }
 
 func (env *Env) call(xs []interface{}) (ret Object) {
-  function := env.get(xs[0:1])
-  if function.Tag == cirruFunction {
-    if item, ok := function.Value.(context); ok {
+  fn := env.get(xs[0:1])
+  if fn.Tag == cirruFn {
+    if item, ok := fn.Value.(context); ok {
       runtime := Env{}
       for i, para := range item.args {
         // println("i is:", i)

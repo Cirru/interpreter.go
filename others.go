@@ -13,9 +13,8 @@ func (env *Env) _type(xs []interface{}) (ret Object) {
     case 4: ret.Value = "regexp"
     case 5: ret.Value = "table"
     case 6: ret.Value = "array"
-    case 7: ret.Value = "function"
-    case 8: ret.Value = "code"
-    case 9: ret.Value = "nil"
+    case 7: ret.Value = "fn"
+    case 8: ret.Value = "nil"
     default: panic("unknow type")
     }
     ret.Value = value.Tag

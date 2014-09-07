@@ -56,9 +56,11 @@ func transformObject(data Object) []interface{} {
     case cirruRegexp:
       str := fmt.Sprintf("%s", data.Value)
       return []interface{}{"regexp", str}
-    case cirruCode:
-      if value, ok := data.Value.(*[]interface{}); ok {
-        return []interface{}{"code", transformCode(*value)}
+    case cirruFn:
+      if fnContext, ok := data.Value.(context); ok {
+        args := transformCode(fnContext.args)
+        code := transformCode(fnContext.code)
+        return []interface{}{"fn", args, code}
       }
     case cirruNil:
       return []interface{}{"nil"}

@@ -35,7 +35,7 @@ print
   int 1
   int 2
 
-print $ code
+print $ fn ()
   set a 1
   print (get a)
   print $ array
@@ -44,7 +44,7 @@ print $ code
       int a
 
 set container (table)
-set container code $ code
+set container f $ fn ()
   set a 1
   print (get a)
   print $ array

@@ -68,7 +68,7 @@ func (env *Env) get(xs []interface{}) (ret Object) {
           }
         }
       }
-      return
+      return Object{cirruNil, nil}
     }
   case 2:
     item := env.get(xs[0:1])
