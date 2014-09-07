@@ -1,9 +1,9 @@
 
 package interpreter
 
-func (env *Env) array(xs []interface{}) (ret Object) {
-  ret.Tag = cirruArray
-  hold := []Object{}
+func (env *Env) array(xs []interface{}) (ret unitype) {
+  ret.Type = cirruArray
+  hold := []unitype{}
   for _, item := range xs {
     list := []interface{}{item}
     hold = append(hold, env.get(list))

@@ -6,8 +6,8 @@ import (
   "github.com/Cirru/parser"
 )
 
-func (env *Env) table(xs []interface{}) (ret Object) {
-  ret.Tag = cirruTable
+func (env *Env) table(xs []interface{}) (ret unitype) {
+  ret.Type = cirruTable
   hold := Env{}
   for _, item := range xs {
     if pair, ok := item.([]interface{}); ok {
@@ -24,7 +24,7 @@ func (env *Env) table(xs []interface{}) (ret Object) {
   return
 }
 
-func (env *Env) set(xs []interface{}) (ret Object) {
+func (env *Env) set(xs []interface{}) (ret unitype) {
   switch len(xs) {
   case 2:
     value := env.get(xs[1:2])
@@ -34,7 +34,7 @@ func (env *Env) set(xs []interface{}) (ret Object) {
     }
     if list, ok := xs[0].([]interface{}); ok {
       variable := env.get(list[0:1])
-      if variable.Tag == cirruString {
+      if variable.Type == cirruString {
         if name, ok := variable.Value.(string); ok {
           (*env)[name] = value
           return value
@@ -53,7 +53,7 @@ func (env *Env) set(xs []interface{}) (ret Object) {
   return
 }
 
-func (env *Env) get(xs []interface{}) (ret Object) {
+func (env *Env) get(xs []interface{}) (ret unitype) {
   switch len(xs) {
   case 1:
     if token, ok := xs[0].(parser.Token); ok {
@@ -68,7 +68,7 @@ func (env *Env) get(xs []interface{}) (ret Object) {
           }
         }
       }
-      return Object{cirruNil, nil}
+      return unitype{cirruNil, nil}
     }
   case 2:
     item := env.get(xs[0:1])

@@ -1,11 +1,11 @@
 
 package interpreter
 
-func (env *Env) _type(xs []interface{}) (ret Object) {
+func (env *Env) _type(xs []interface{}) (ret unitype) {
   value := env.get(xs[0:1])
   if &value != nil {
-    ret.Tag = cirruString
-    switch value.Tag {
+    ret.Type = cirruString
+    switch value.Type {
     case 0: ret.Value = "int"
     case 1: ret.Value = "float"
     case 2: ret.Value = "bool"
@@ -17,7 +17,7 @@ func (env *Env) _type(xs []interface{}) (ret Object) {
     case 8: ret.Value = "nil"
     default: panic("unknow type")
     }
-    ret.Value = value.Tag
+    ret.Value = value.Type
   }
   return
 }

@@ -10,7 +10,7 @@ import (
 
 var moduleCenter Env
 
-func (env *Env) require(xs []interface{}) (ret Object) {
+func (env *Env) require(xs []interface{}) (ret unitype) {
   if token, ok := xs[0].(parser.Token); ok {
     name := token.Text
     if cache, ok := moduleCenter[name]; ok {

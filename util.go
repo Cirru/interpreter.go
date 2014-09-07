@@ -7,14 +7,14 @@ import (
   "fmt"
 )
 
-func stringifyObject(data Object) string {
-  tree := transformObject(data)
+func stringifyunitype(data unitype) string {
+  tree := transformunitype(data)
   lines := []interface{}{tree}
   return writer.MakeCode(lines)
 }
 
-func transformObject(data Object) []interface{} {
-  switch data.Tag {
+func transformunitype(data unitype) []interface{} {
+  switch data.Type {
     case cirruString:
       if stringValue, ok := data.Value.(string); ok {
         return []interface{}{"string", stringValue}
@@ -38,9 +38,9 @@ func transformObject(data Object) []interface{} {
       }
     case cirruArray:
       list := []interface{}{"array"}
-      if value, ok := data.Value.(*[]Object); ok {
+      if value, ok := data.Value.(*[]unitype); ok {
         for _, item := range *value {
-          list = append(list, transformObject(item))
+          list = append(list, transformunitype(item))
         }
       }
       return list
@@ -48,7 +48,7 @@ func transformObject(data Object) []interface{} {
       list := []interface{}{"table"}
       if value, ok := data.Value.(*Env); ok {
         for k, v := range *value {
-          pair := []interface{}{k, transformObject(v)}
+          pair := []interface{}{k, transformunitype(v)}
           list = append(list, pair)
         }
       }
@@ -70,14 +70,14 @@ func transformObject(data Object) []interface{} {
   return []interface{}{}
 }
 
-func generateString(x string) (ret Object) {
-  ret.Tag = cirruString
+func generateString(x string) (ret unitype) {
+  ret.Type = cirruString
   ret.Value = x
   return
 }
 
-func generateTable(m *Env) (ret Object) {
-  ret.Tag = cirruTable
+func generateTable(m *Env) (ret unitype) {
+  ret.Type = cirruTable
   ret.Value = m
   return
 }

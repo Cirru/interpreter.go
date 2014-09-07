@@ -9,17 +9,17 @@ type context struct {
   code []interface{}
 }
 
-func (env *Env) fn(xs []interface{}) (ret Object) {
-  ret.Tag = cirruFn
+func (env *Env) fn(xs []interface{}) (ret unitype) {
+  ret.Type = cirruFn
   if args, ok := xs[0].([]interface{}); ok {
     ret.Value = context{env, args, xs[1:]}
   }
   return
 }
 
-func (env *Env) call(xs []interface{}) (ret Object) {
+func (env *Env) call(xs []interface{}) (ret unitype) {
   fn := env.get(xs[0:1])
-  if fn.Tag == cirruFn {
+  if fn.Type == cirruFn {
     if item, ok := fn.Value.(context); ok {
       runtime := Env{}
       for i, para := range item.args {

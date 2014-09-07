@@ -7,23 +7,23 @@ import (
   "strings"
 )
 
-func (env *Env) comment(xs []interface{}) (ret Object) {
+func (env *Env) comment(xs []interface{}) (ret unitype) {
   return
 }
 
-func (env *Env) _print(xs []interface{}) (ret Object) {
+func (env *Env) _print(xs []interface{}) (ret unitype) {
   outList := []string{}
   for _, value := range xs {
     if token, ok := value.(parser.Token); ok {
       list := []interface{}{}
       list = append(list, token)
-      unit := stringifyObject(env.get(list))
+      unit := stringifyunitype(env.get(list))
       outList = append(outList, unit)
     }
     if list, ok := value.([]interface{}); ok {
       calculated := Evaluate(env, list)
       // fmt.Println("value is:", calculated)
-      unit := stringifyObject(calculated)
+      unit := stringifyunitype(calculated)
       outList = append(outList, unit)
     }
   }

@@ -6,17 +6,17 @@ import (
   "fmt"
 )
 
-type Object struct {
-  Tag cirruType
+type unitype struct {
+  Type cirruType
   Value interface{}
 }
 
-type Env map[string]Object
+type Env map[string]unitype
 
 // Evaluate read expressions and return a single result
-func Evaluate(env *Env, xs []interface{}) (ret Object) {
+func Evaluate(env *Env, xs []interface{}) (ret unitype) {
   if len(xs) == 0 {
-    emptyArray := Object{cirruArray, xs}
+    emptyArray := unitype{cirruArray, xs}
     return emptyArray
   }
 
@@ -49,9 +49,9 @@ func Evaluate(env *Env, xs []interface{}) (ret Object) {
   return
 }
 
-func userCall(env *Env, xs []interface{}) (ret Object) {
+func userCall(env *Env, xs []interface{}) (ret unitype) {
   head := env.get(xs[0:1])
-  if head.Tag == cirruFn {
+  if head.Type == cirruFn {
     ret = env.call(xs)
   }
   return
