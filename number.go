@@ -6,25 +6,25 @@ import (
   "strconv"
 )
 
-func cirruInt(env *Env, xs []interface{}) (ret Object) {
+func (env *Env) _int(xs []interface{}) (ret Object) {
   if token, ok := xs[0].(parser.Token); ok {
     intNumber, err := strconv.Atoi(token.Text)
     if err != nil {
       panic(err)
     }
-    ret.Tag = cirruTypeInt
+    ret.Tag = cirruInt
     ret.Value = intNumber
   }
   return
 }
 
-func cirruFloat(env *Env, xs []interface{}) (ret Object) {
+func (env *Env) _float(xs []interface{}) (ret Object) {
   if token, ok := xs[0].(parser.Token); ok {
     floatNumber, err := strconv.ParseFloat(token.Text, 64)
     if err != nil {
       panic(err)
     }
-    ret.Tag = cirruTypeFloat
+    ret.Tag = cirruFloat
     ret.Value = floatNumber
   }
   return

@@ -1,10 +1,10 @@
 
 package interpreter
 
-func cirruType(env *Env, xs []interface{}) (ret Object) {
-  value := cirruGet(env, xs[0:1])
+func (env *Env) _type(xs []interface{}) (ret Object) {
+  value := env.get(xs[0:1])
   if &value != nil {
-    ret.Tag = cirruTypeString
+    ret.Tag = cirruString
     switch value.Tag {
     case 0: ret.Value = "int"
     case 1: ret.Value = "float"
@@ -15,6 +15,7 @@ func cirruType(env *Env, xs []interface{}) (ret Object) {
     case 6: ret.Value = "array"
     case 7: ret.Value = "function"
     case 8: ret.Value = "code"
+    case 9: ret.Value = "nil"
     default: panic("unknow type")
     }
     ret.Value = value.Tag

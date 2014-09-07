@@ -6,13 +6,13 @@ import (
   "regexp"
 )
 
-func cirruRegexp(env *Env, xs []interface{}) (ret Object) {
+func (env *Env) regexp(xs []interface{}) (ret Object) {
   if token, ok := xs[0].(parser.Token); ok {
     reg, err := regexp.Compile(token.Text);
     if err != nil {
       panic(err)
     }
-    ret.Tag = cirruTypeRegexp
+    ret.Tag = cirruRegexp
     ret.Value = reg
   }
   return

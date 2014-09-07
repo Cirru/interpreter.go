@@ -5,8 +5,8 @@ import (
   "github.com/Cirru/parser"
 )
 
-func cirruBool(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = cirruTypeBool
+func (env *Env) _bool(xs []interface{}) (ret Object) {
+  ret.Tag = cirruBool
   ret.Value = false
   if token, ok := xs[0].(parser.Token); ok {
     trueValues := []string{"true", "yes", "right", "1"}

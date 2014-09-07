@@ -6,8 +6,8 @@ import (
   "github.com/Cirru/parser"
 )
 
-func cirruTable(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = cirruTypeTable
+func (env *Env) table(xs []interface{}) (ret Object) {
+  ret.Tag = cirruTable
   hold := Env{}
   for _, item := range xs {
     if pair, ok := item.([]interface{}); ok {
@@ -16,7 +16,7 @@ func cirruTable(env *Env, xs []interface{}) (ret Object) {
       if token, ok := name.(parser.Token); ok {
         key = token.Text
       }
-      value := cirruGet(env, pair[1:2])
+      value := env.get(pair[1:2])
       hold[key] = value
     }
   }
@@ -24,17 +24,17 @@ func cirruTable(env *Env, xs []interface{}) (ret Object) {
   return
 }
 
-func cirruSet(env *Env, xs []interface{}) (ret Object) {
+func (env *Env) set(xs []interface{}) (ret Object) {
   switch len(xs) {
   case 2:
-    value := cirruGet(env, xs[1:2])
+    value := env.get(xs[1:2])
     if token, ok := xs[0].(parser.Token); ok {
       (*env)[token.Text] = value
       return value
     }
     if list, ok := xs[0].([]interface{}); ok {
-      variable := cirruGet(env, list[0:1])
-      if variable.Tag == cirruTypeString {
+      variable := env.get(list[0:1])
+      if variable.Tag == cirruString {
         if name, ok := variable.Value.(string); ok {
           (*env)[name] = value
           return value
@@ -42,9 +42,9 @@ func cirruSet(env *Env, xs []interface{}) (ret Object) {
       }
     }
   case 3:
-    hold := cirruGet(env, xs[0:1])
+    hold := env.get(xs[0:1])
     if scope, ok := hold.Value.(*Env); ok {
-      ret = cirruSet(scope, xs[1:3])
+      ret = scope.set(xs[1:3])
       return
     }
   default:
@@ -53,7 +53,7 @@ func cirruSet(env *Env, xs []interface{}) (ret Object) {
   return
 }
 
-func cirruGet(env *Env, xs []interface{}) (ret Object) {
+func (env *Env) get(xs []interface{}) (ret Object) {
   switch len(xs) {
   case 1:
     if token, ok := xs[0].(parser.Token); ok {
@@ -63,7 +63,7 @@ func cirruGet(env *Env, xs []interface{}) (ret Object) {
       } else {
         if parent, ok := (*env)["parent"]; ok {
           if scope, ok := parent.Value.(*Env); ok {
-            ret = cirruGet(scope, xs[0:1])
+            ret = scope.get(xs[0:1])
             return
           }
         }
@@ -71,9 +71,9 @@ func cirruGet(env *Env, xs []interface{}) (ret Object) {
       return
     }
   case 2:
-    item := cirruGet(env, xs[0:1])
+    item := env.get(xs[0:1])
     if scope, ok := item.Value.(*Env); ok {
-      ret = cirruGet(scope, xs[1:2])
+      ret = scope.get(xs[1:2])
       return
     }
   default:

@@ -3,23 +3,23 @@ package interpreter
 
 import "fmt"
 
-func cirruSelf(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = cirruTypeTable
+func (env *Env) self(xs []interface{}) (ret Object) {
+  ret.Tag = cirruTable
   ret.Value = env
   return
 }
 
-func cirruChild(env *Env, xs []interface{}) (ret Object) {
+func (env *Env) child(xs []interface{}) (ret Object) {
   childTable := Env{}
-  childTable["parent"] = cirruSelf(env, xs)
-  ret.Tag = cirruTypeTable
+  childTable["parent"] = env.self(xs)
+  ret.Tag = cirruTable
   ret.Value = &childTable
   // println("ret is:", ret.Value)
   return
 }
 
-func cirruUnder(env *Env, xs []interface{}) (ret Object) {
-  item := cirruGet(env, xs[0:1])
+func (env *Env) under(xs []interface{}) (ret Object) {
+  item := env.get(xs[0:1])
   if scope, ok := item.Value.(*Env); ok {
     for _, exp := range xs[1:] {
       if list, ok := exp.([]interface{}); ok {
@@ -32,16 +32,16 @@ func cirruUnder(env *Env, xs []interface{}) (ret Object) {
   return
 }
 
-func cirruCode(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = cirruTypeCode
+func (env *Env) code(xs []interface{}) (ret Object) {
+  ret.Tag = cirruCode
   ret.Value = &xs
   return
 }
 
-func cirruEval(env *Env, xs []interface{}) (ret Object) {
+func (env *Env) eval(xs []interface{}) (ret Object) {
   switch len(xs) {
   case 1:
-    if code, ok := cirruGet(env, xs[0:1]).Value.(*[]interface{}); ok {
+    if code, ok := env.get(xs[0:1]).Value.(*[]interface{}); ok {
       for _, line := range *code {
         if codeLine, ok := line.([]interface{}); ok {
           ret = Evaluate(env, codeLine)
@@ -50,8 +50,8 @@ func cirruEval(env *Env, xs []interface{}) (ret Object) {
       }
     }
   case 2:
-    if scope, ok := cirruGet(env, xs[0:1]).Value.(*Env); ok {
-      if code, ok := cirruGet(env, xs[1:2]).Value.(*[]interface{}); ok {
+    if scope, ok := env.get(xs[0:1]).Value.(*Env); ok {
+      if code, ok := env.get(xs[1:2]).Value.(*[]interface{}); ok {
         for _, line := range *code {
           if codeLine, ok := line.([]interface{}); ok {
             ret = Evaluate(scope, codeLine)

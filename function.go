@@ -9,23 +9,23 @@ type context struct {
   code []interface{}
 }
 
-func cirruFunction(env *Env, xs []interface{}) (ret Object) {
-  ret.Tag = cirruTypeFunction
+func (env *Env) function(xs []interface{}) (ret Object) {
+  ret.Tag = cirruFunction
   if args, ok := xs[0].([]interface{}); ok {
     ret.Value = context{env, args, xs[1:]}
   }
   return
 }
 
-func cirruCall(env *Env, xs []interface{}) (ret Object) {
-  function := cirruGet(env, xs[0:1])
-  if function.Tag == cirruTypeFunction {
+func (env *Env) call(xs []interface{}) (ret Object) {
+  function := env.get(xs[0:1])
+  if function.Tag == cirruFunction {
     if item, ok := function.Value.(context); ok {
       runtime := Env{}
       for i, para := range item.args {
         // println("i is:", i)
         if token, ok := para.(parser.Token); ok {
-          runtime[token.Text] = cirruGet(env, xs[i+1:i+2])
+          runtime[token.Text] = env.get(xs[i+1:i+2])
         }
       }
       for _, line := range item.code {
