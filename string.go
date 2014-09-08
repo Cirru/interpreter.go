@@ -6,7 +6,7 @@ import (
   "github.com/Cirru/writer"
 )
 
-func (env *Env) _string(xs []interface{}) (ret unitype) {
+func (env *scope) _string(xs []interface{}) (ret unitype) {
   if token, ok := xs[0].(parser.Token); ok {
     ret.Type = uniString
     ret.Value = token.Text

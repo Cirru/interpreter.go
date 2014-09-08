@@ -8,9 +8,9 @@ import (
   "io/ioutil"
 )
 
-var moduleCenter Env
+var moduleCenter scope
 
-func (env *Env) require(xs []interface{}) (ret unitype) {
+func (env *scope) require(xs []interface{}) (ret unitype) {
   if token, ok := xs[0].(parser.Token); ok {
     name := token.Text
     if cache, ok := moduleCenter[uni(name)]; ok {
@@ -26,11 +26,11 @@ func (env *Env) require(xs []interface{}) (ret unitype) {
         moduleRoot := os.Getenv("cirru_path")
         filepath = path.Join(moduleRoot, name)
       }
-      scope := Env{}
-      exports := Env{}
-      scope[uni("filepath")] = generateString(filepath)
+      fileScope := scope{}
+      exports := scope{}
+      fileScope[uni("filepath")] = generateString(filepath)
       ret = generateTable(&exports)
-      scope[uni("exports")] = ret
+      fileScope[uni("exports")] = ret
       moduleCenter[uni(filepath)] = ret
 
       codeByte, err := ioutil.ReadFile(filepath)
@@ -46,7 +46,7 @@ func (env *Env) require(xs []interface{}) (ret unitype) {
 
       for _, line := range ast {
         if list, ok := line.([]interface{}); ok {
-          Evaluate(&scope, list)
+          Evaluate(&fileScope, list)
         }
       }
       return

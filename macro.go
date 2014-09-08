@@ -3,7 +3,7 @@ package interpreter
 
 import "github.com/Cirru/parser"
 
-func (env *Env) macro(xs []interface{}) (ret unitype) {
+func (env *scope) macro(xs []interface{}) (ret unitype) {
   ret.Type = uniMacro
   if args, ok := xs[0].([]interface{}); ok {
     ret.Value = context{env, args, xs[1:]}
@@ -11,11 +11,11 @@ func (env *Env) macro(xs []interface{}) (ret unitype) {
   return
 }
 
-func (env *Env) expand(xs []interface{}) (ret unitype) {
+func (env *scope) expand(xs []interface{}) (ret unitype) {
   macro := env.get(xs[0:1])
   if macro.Type == uniMacro {
     if ctx, ok := macro.Value.(context); ok {
-      runtime := Env{}
+      runtime := scope{}
       runtime[unitype{uniString, "outer"}] = unitype{uniTable, env}
       for i, args := range ctx.args {
         if token, ok := args.(parser.Token); ok {

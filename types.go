@@ -22,9 +22,9 @@ type unitype struct {
 }
 
 type context struct {
-  env *Env
+  env *scope
   args []interface{}
   code []interface{}
 }
 
-type Env map[unitype]unitype
+type scope map[unitype]unitype

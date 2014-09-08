@@ -6,7 +6,7 @@ import (
   "strconv"
 )
 
-func (env *Env) _int(xs []interface{}) (ret unitype) {
+func (env *scope) _int(xs []interface{}) (ret unitype) {
   if token, ok := xs[0].(parser.Token); ok {
     intNumber, err := strconv.Atoi(token.Text)
     if err != nil {
@@ -18,7 +18,7 @@ func (env *Env) _int(xs []interface{}) (ret unitype) {
   return
 }
 
-func (env *Env) _float(xs []interface{}) (ret unitype) {
+func (env *scope) _float(xs []interface{}) (ret unitype) {
   if token, ok := xs[0].(parser.Token); ok {
     floatNumber, err := strconv.ParseFloat(token.Text, 64)
     if err != nil {

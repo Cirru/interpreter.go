@@ -6,7 +6,7 @@ import (
   "regexp"
 )
 
-func (env *Env) regexp(xs []interface{}) (ret unitype) {
+func (env *scope) regexp(xs []interface{}) (ret unitype) {
   if token, ok := xs[0].(parser.Token); ok {
     reg, err := regexp.Compile(token.Text);
     if err != nil {

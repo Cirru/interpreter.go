@@ -7,11 +7,11 @@ import (
   "strings"
 )
 
-func (env *Env) comment(xs []interface{}) (ret unitype) {
+func (env *scope) comment(xs []interface{}) (ret unitype) {
   return unitype{uniNil, nil}
 }
 
-func (env *Env) _print(xs []interface{}) (ret unitype) {
+func (env *scope) _print(xs []interface{}) (ret unitype) {
   outList := []string{}
   for _, value := range xs {
     if token, ok := value.(parser.Token); ok {

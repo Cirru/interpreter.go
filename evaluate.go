@@ -7,7 +7,7 @@ import (
 )
 
 // Evaluate read expressions and return a single result
-func Evaluate(env *Env, xs []interface{}) (ret unitype) {
+func Evaluate(env *scope, xs []interface{}) (ret unitype) {
   if len(xs) == 0 {
     emptyArray := unitype{uniArray, xs}
     return emptyArray
@@ -44,7 +44,7 @@ func Evaluate(env *Env, xs []interface{}) (ret unitype) {
   return
 }
 
-func userCall(env *Env, xs []interface{}) (ret unitype) {
+func userCall(env *scope, xs []interface{}) (ret unitype) {
   head := env.get(xs[0:1])
   if head.Type == uniFn {
     ret = env.call(xs)

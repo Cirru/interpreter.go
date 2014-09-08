@@ -3,7 +3,7 @@ package interpreter
 
 import "github.com/Cirru/parser"
 
-func (env *Env) fn(xs []interface{}) (ret unitype) {
+func (env *scope) fn(xs []interface{}) (ret unitype) {
   ret.Type = uniFn
   if args, ok := xs[0].([]interface{}); ok {
     ret.Value = context{env, args, xs[1:]}
@@ -11,11 +11,11 @@ func (env *Env) fn(xs []interface{}) (ret unitype) {
   return
 }
 
-func (env *Env) call(xs []interface{}) (ret unitype) {
+func (env *scope) call(xs []interface{}) (ret unitype) {
   fn := env.get(xs[0:1])
   if fn.Type == uniFn {
     if item, ok := fn.Value.(context); ok {
-      runtime := Env{}
+      runtime := scope{}
       for i, para := range item.args {
         // println("i is:", i)
         if token, ok := para.(parser.Token); ok {

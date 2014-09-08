@@ -1,7 +1,7 @@
 
 package interpreter
 
-func (env *Env) array(xs []interface{}) (ret unitype) {
+func (env *scope) array(xs []interface{}) (ret unitype) {
   ret.Type = uniArray
   hold := map[unitype]unitype{}
   for index, item := range xs {

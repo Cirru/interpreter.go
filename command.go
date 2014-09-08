@@ -10,12 +10,12 @@ import (
 
 // Interpret takes result from `parser.Parse` and run in context.
 func Interpret(filepath string) error {
-  moduleCenter = Env{}
-  scope := Env{}
-  exports := Env{}
-  scope[uni("filepath")] = generateString(filepath)
+  moduleCenter = scope{}
+  fileScope := scope{}
+  exports := scope{}
+  fileScope[uni("filepath")] = generateString(filepath)
   ret := generateTable(&exports)
-  scope[uni("exports")] = ret
+  fileScope[uni("exports")] = ret
   moduleCenter[uni(filepath)] = ret
 
   codeByte, err := ioutil.ReadFile(filepath)
@@ -34,7 +34,7 @@ func Interpret(filepath string) error {
 
   for _, line := range ast {
     if list, ok := line.([]interface{}); ok {
-      Evaluate(&scope, list)
+      Evaluate(&fileScope, list)
     }
   }
   return nil

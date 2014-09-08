@@ -6,9 +6,9 @@ import (
   "github.com/Cirru/parser"
 )
 
-func (env *Env) table(xs []interface{}) (ret unitype) {
+func (env *scope) table(xs []interface{}) (ret unitype) {
   ret.Type = uniTable
-  hold := Env{}
+  hold := scope{}
   for _, item := range xs {
     if pair, ok := item.([]interface{}); ok {
       name := pair[0]
@@ -24,7 +24,7 @@ func (env *Env) table(xs []interface{}) (ret unitype) {
   return
 }
 
-func (env *Env) set(xs []interface{}) (ret unitype) {
+func (env *scope) set(xs []interface{}) (ret unitype) {
   switch len(xs) {
   case 2:
     value := env.get(xs[1:2])
@@ -43,7 +43,7 @@ func (env *Env) set(xs []interface{}) (ret unitype) {
     }
   case 3:
     hold := env.get(xs[0:1])
-    if scope, ok := hold.Value.(*Env); ok {
+    if scope, ok := hold.Value.(*scope); ok {
       ret = scope.set(xs[1:3])
       return
     }
@@ -53,7 +53,7 @@ func (env *Env) set(xs []interface{}) (ret unitype) {
   return
 }
 
-func (env *Env) get(xs []interface{}) (ret unitype) {
+func (env *scope) get(xs []interface{}) (ret unitype) {
   switch len(xs) {
   case 1:
     if token, ok := xs[0].(parser.Token); ok {
@@ -62,7 +62,7 @@ func (env *Env) get(xs []interface{}) (ret unitype) {
         return
       } else {
         if parent, ok := (*env)[uni("parent")]; ok {
-          if scope, ok := parent.Value.(*Env); ok {
+          if scope, ok := parent.Value.(*scope); ok {
             ret = scope.get(xs[0:1])
             return
           }
@@ -72,7 +72,7 @@ func (env *Env) get(xs []interface{}) (ret unitype) {
     }
   case 2:
     item := env.get(xs[0:1])
-    if scope, ok := item.Value.(*Env); ok {
+    if scope, ok := item.Value.(*scope); ok {
       ret = scope.get(xs[1:2])
       return
     }

@@ -46,7 +46,7 @@ func transformunitype(data unitype) []interface{} {
       return list
     case uniTable:
       list := []interface{}{"table"}
-      if value, ok := data.Value.(*Env); ok {
+      if value, ok := data.Value.(*scope); ok {
         for k, v := range *value {
           pair := []interface{}{k, transformunitype(v)}
           list = append(list, pair)
@@ -82,7 +82,7 @@ func generateString(x string) (ret unitype) {
   return
 }
 
-func generateTable(m *Env) (ret unitype) {
+func generateTable(m *scope) (ret unitype) {
   ret.Type = uniTable
   ret.Value = m
   return
