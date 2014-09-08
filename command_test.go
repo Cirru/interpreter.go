@@ -3,15 +3,13 @@ package interpreter
 import (
   "testing"
   "path"
-  // "io/ioutil"
+  "io/ioutil"
 )
 
 func TestCommand(t *testing.T) {
-  // files, _ := ioutil.ReadDir("cirru/")
-  files := []string{"macro.cirru"}
+  files, _ := ioutil.ReadDir("cirru/")
   for _, file := range files {
-    // filepath := path.Join("cirru/", file.Name())
-    filepath := path.Join("cirru/", file)
+    filepath := path.Join("cirru/", file.Name())
     println()
     println("---> Running for:", filepath)
     println()

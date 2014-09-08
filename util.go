@@ -100,3 +100,14 @@ func transformCode(xs []interface{}) []interface{} {
   }
   return hold
 }
+
+func uni(x interface{}) (ret unitype) {
+  switch value := x.(type) {
+  case int:
+    ret = unitype{uniInt, value}
+  case string:
+    ret = unitype{uniString, value}
+  default: panic("not implemented")
+  }
+  return
+}

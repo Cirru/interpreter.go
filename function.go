@@ -19,7 +19,7 @@ func (env *Env) call(xs []interface{}) (ret unitype) {
       for i, para := range item.args {
         // println("i is:", i)
         if token, ok := para.(parser.Token); ok {
-          runtime[makeUniString(token.Text)] = env.get(xs[i+1:i+2])
+          runtime[uni(token.Text)] = env.get(xs[i+1:i+2])
         }
       }
       for _, line := range item.code {

@@ -28,5 +28,3 @@ type context struct {
 }
 
 type Env map[unitype]unitype
-
-type code []interface{}

@@ -1,7 +1,6 @@
 
 package interpreter
 
-import "fmt"
 import "github.com/Cirru/parser"
 
 func (env *Env) macro(xs []interface{}) (ret unitype) {
@@ -21,7 +20,7 @@ func (env *Env) expand(xs []interface{}) (ret unitype) {
       for i, args := range ctx.args {
         if token, ok := args.(parser.Token); ok {
           if para, ok := xs[i+1].(parser.Token); ok {
-            runtime[makeUniString(token.Text)] = unitype{uniString, para.Text}
+            runtime[uni(token.Text)] = unitype{uniString, para.Text}
           } else {
             panic("should not be expression in args")
           }

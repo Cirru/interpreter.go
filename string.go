@@ -18,15 +18,3 @@ func (env *Env) _string(xs []interface{}) (ret unitype) {
   }
   return
 }
-
-func makeUniString(str string) unitype {
-  return unitype{uniString, str}
-}
-
-func makeUniInt(n int) unitype {
-  return unitype{uniInt, n}
-}
-
-func makeUniTable(table *Env) unitype {
-  return unitype{uniTable, table}
-}
