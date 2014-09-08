@@ -26,3 +26,7 @@ func makeUniString(str string) unitype {
 func makeUniInt(n int) unitype {
   return unitype{uniInt, n}
 }
+
+func makeUniTable(table *Env) unitype {
+  return unitype{uniTable, table}
+}

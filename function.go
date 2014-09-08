@@ -3,12 +3,6 @@ package interpreter
 
 import "github.com/Cirru/parser"
 
-type context struct {
-  env *Env
-  args []interface{}
-  code []interface{}
-}
-
 func (env *Env) fn(xs []interface{}) (ret unitype) {
   ret.Type = uniFn
   if args, ok := xs[0].([]interface{}); ok {

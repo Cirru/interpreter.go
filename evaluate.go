@@ -6,13 +6,6 @@ import (
   "fmt"
 )
 
-type unitype struct {
-  Type unitypeName
-  Value interface{}
-}
-
-type Env map[unitype]unitype
-
 // Evaluate read expressions and return a single result
 func Evaluate(env *Env, xs []interface{}) (ret unitype) {
   if len(xs) == 0 {
@@ -37,6 +30,8 @@ func Evaluate(env *Env, xs []interface{}) (ret unitype) {
     case "set":       ret = env.set(xs[1:])
     case "string":    ret = env._string(xs[1:])
     case "type":      ret = env._type(xs[1:])
+    case "macro":     ret = env.macro(xs[1:])
+    case "expand":    ret = env.expand(xs[1:])
     default:
       ret = userCall(env, xs)
     }

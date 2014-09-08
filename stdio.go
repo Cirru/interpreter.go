@@ -8,7 +8,7 @@ import (
 )
 
 func (env *Env) comment(xs []interface{}) (ret unitype) {
-  return
+  return unitype{uniNil, nil}
 }
 
 func (env *Env) _print(xs []interface{}) (ret unitype) {
@@ -27,6 +27,6 @@ func (env *Env) _print(xs []interface{}) (ret unitype) {
       outList = append(outList, unit)
     }
   }
-  fmt.Println(strings.Join(outList, "\n"))
+  fmt.Println(strings.Join(outList, ""))
   return
 }
