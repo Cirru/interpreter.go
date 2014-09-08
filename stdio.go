@@ -2,28 +2,26 @@
 package interpreter
 
 import (
-  "github.com/Cirru/parser"
   "fmt"
   "strings"
 )
 
-func (env *scope) comment(xs []interface{}) (ret unitype) {
+func (env *scope) comment(xs sequence) (ret unitype) {
   return unitype{uniNil, nil}
 }
 
-func (env *scope) _print(xs []interface{}) (ret unitype) {
+func (env *scope) _print(xs sequence) (ret unitype) {
   outList := []string{}
   for _, value := range xs {
-    if token, ok := value.(parser.Token); ok {
-      list := []interface{}{}
-      list = append(list, token)
-      unit := stringifyunitype(env.get(list))
+    if t, ok := value.(token); ok {
+      list := sequence{}
+      list = append(list, t)
+      unit := stringifyUnitype(env.get(list))
       outList = append(outList, unit)
-    }
-    if list, ok := value.([]interface{}); ok {
+    } else if list, ok := value.(sequence); ok {
       calculated := Evaluate(env, list)
       // fmt.Println("value is:", calculated)
-      unit := stringifyunitype(calculated)
+      unit := stringifyUnitype(calculated)
       outList = append(outList, unit)
     }
   }

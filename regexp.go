@@ -2,13 +2,12 @@
 package interpreter
 
 import (
-  "github.com/Cirru/parser"
   "regexp"
 )
 
-func (env *scope) regexp(xs []interface{}) (ret unitype) {
-  if token, ok := xs[0].(parser.Token); ok {
-    reg, err := regexp.Compile(token.Text);
+func (env *scope) regexp(xs sequence) (ret unitype) {
+  if t, ok := xs[0].(token); ok {
+    reg, err := regexp.Compile(t.Text);
     if err != nil {
       panic(err)
     }

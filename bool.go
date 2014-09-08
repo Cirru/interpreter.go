@@ -1,14 +1,10 @@
 
 package interpreter
 
-import (
-  "github.com/Cirru/parser"
-)
-
-func (env *scope) _bool(xs []interface{}) (ret unitype) {
+func (env *scope) _bool(xs sequence) (ret unitype) {
   ret.Type = uniBool
   ret.Value = false
-  if token, ok := xs[0].(parser.Token); ok {
+  if token, ok := xs[0].(token); ok {
     trueValues := []string{"true", "yes", "right", "1"}
     for _, text := range trueValues {
       if text == token.Text {
@@ -16,6 +12,8 @@ func (env *scope) _bool(xs []interface{}) (ret unitype) {
       }
     }
     return
+  } else {
+    panic("failed to parse bool")
   }
   return
 }

@@ -2,19 +2,18 @@
 package interpreter
 
 import (
-  "github.com/Cirru/parser"
   "fmt"
 )
 
 // Evaluate read expressions and return a single result
-func Evaluate(env *scope, xs []interface{}) (ret unitype) {
+func Evaluate(env *scope, xs sequence) (ret unitype) {
   if len(xs) == 0 {
     emptyArray := unitype{uniArray, xs}
     return emptyArray
   }
 
-  if token, ok := xs[0].(parser.Token); ok {
-    switch token.Text {
+  if t, ok := xs[0].(token); ok {
+    switch t.Text {
     case "--":        ret = env.comment(xs[1:])
     case "array":     ret = env.array(xs[1:])
     case "fn":        ret = env.fn(xs[1:])
@@ -37,14 +36,14 @@ func Evaluate(env *scope, xs []interface{}) (ret unitype) {
     }
     return
   }
-  if headExpression, ok := xs[0].([]interface{}); ok {
+  if headExpression, ok := xs[0].(sequence); ok {
     fmt.Println(headExpression)
     return
   }
   return
 }
 
-func userCall(env *scope, xs []interface{}) (ret unitype) {
+func userCall(env *scope, xs sequence) (ret unitype) {
   head := env.get(xs[0:1])
   if head.Type == uniFn {
     ret = env.call(xs)

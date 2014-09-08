@@ -1,7 +1,7 @@
 
 set swap $ macro (a b)
-  set tmp a
-  set outer (get a) b
+  set tmp (get outer (get a))
+  set outer (get a) (get outer (get b))
   set outer (get b) tmp
 
 set x $ int 1

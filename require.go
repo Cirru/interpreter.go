@@ -10,8 +10,8 @@ import (
 
 var moduleCenter scope
 
-func (env *scope) require(xs []interface{}) (ret unitype) {
-  if token, ok := xs[0].(parser.Token); ok {
+func (env *scope) require(xs sequence) (ret unitype) {
+  if token, ok := xs[0].(token); ok {
     name := token.Text
     if cache, ok := moduleCenter[uni(name)]; ok {
       ret = cache
@@ -42,11 +42,12 @@ func (env *scope) require(xs []interface{}) (ret unitype) {
       for _, c := range codeByte {
         p.Read(rune(c))
       }
-      ast := p.ToTree()
+      p.Complete()
+      ast := toSequence(p.ToArray())
 
       for _, line := range ast {
-        if list, ok := line.([]interface{}); ok {
-          Evaluate(&fileScope, list)
+        if seq, ok := line.(sequence); ok {
+          Evaluate(&fileScope, seq)
         }
       }
       return

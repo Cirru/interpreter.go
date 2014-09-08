@@ -1,7 +1,7 @@
 
 package interpreter
 
-func (env *scope) _type(xs []interface{}) (ret unitype) {
+func (env *scope) _type(xs sequence) (ret unitype) {
   value := env.get(xs[0:1])
   if &value != nil {
     ret.Type = uniString

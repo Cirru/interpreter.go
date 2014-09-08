@@ -7,13 +7,13 @@ import (
   "fmt"
 )
 
-func stringifyunitype(data unitype) string {
-  tree := transformunitype(data)
+func stringifyUnitype(data unitype) string {
+  tree := showUnitype(data)
   lines := []interface{}{tree}
   return writer.MakeCode(lines)
 }
 
-func transformunitype(data unitype) []interface{} {
+func showUnitype(data unitype) []interface{} {
   switch data.Type {
     case uniString:
       if stringValue, ok := data.Value.(string); ok {
@@ -40,7 +40,7 @@ func transformunitype(data unitype) []interface{} {
       list := []interface{}{"array"}
       if value, ok := data.Value.(*map[unitype]unitype); ok {
         for _, item := range *value {
-          list = append(list, transformunitype(item))
+          list = append(list, showUnitype(item))
         }
       }
       return list
@@ -48,7 +48,7 @@ func transformunitype(data unitype) []interface{} {
       list := []interface{}{"table"}
       if value, ok := data.Value.(*scope); ok {
         for k, v := range *value {
-          pair := []interface{}{k, transformunitype(v)}
+          pair := []interface{}{k, showUnitype(v)}
           list = append(list, pair)
         }
       }

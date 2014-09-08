@@ -30,12 +30,25 @@ func Interpret(filepath string) error {
   }
   p.Complete()
 
-  ast := p.ToArray()
+  ast := toSequence(p.ToArray())
 
   for _, line := range ast {
-    if list, ok := line.([]interface{}); ok {
+    if list, ok := line.(sequence); ok {
       Evaluate(&fileScope, list)
     }
   }
   return nil
+}
+
+func toSequence(xs []interface{}) (ret sequence) {
+  for _, child := range xs {
+    if seq, ok := child.([]interface{}); ok {
+      ret = append(ret, toSequence(seq))
+    } else if t, ok := child.(parser.Token); ok {
+      ret = append(ret, token(t))
+    } else {
+      panic("got unknown type from code")
+    }
+  }
+  return
 }

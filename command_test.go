@@ -8,8 +8,13 @@ import (
 
 func TestCommand(t *testing.T) {
   files, _ := ioutil.ReadDir("cirru/")
+  filenames := []string{}
   for _, file := range files {
-    filepath := path.Join("cirru/", file.Name())
+    filenames = append(filenames, file.Name())
+  }
+  // filenames = []string{"macro.cirru"}
+  for _, filename := range filenames {
+    filepath := path.Join("cirru/", filename)
     println()
     println("---> Running for:", filepath)
     println()

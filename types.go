@@ -1,6 +1,8 @@
 
 package interpreter
 
+import "github.com/Cirru/parser"
+
 type unitypeName int
 
 const (
@@ -23,8 +25,12 @@ type unitype struct {
 
 type context struct {
   env *scope
-  args []interface{}
-  code []interface{}
+  args sequence
+  code sequence
 }
 
 type scope map[unitype]unitype
+
+type sequence []interface{}
+
+type token parser.Token
