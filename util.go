@@ -76,18 +76,6 @@ func transformunitype(data unitype) []interface{} {
   return []interface{}{}
 }
 
-func generateString(x string) (ret unitype) {
-  ret.Type = uniString
-  ret.Value = x
-  return
-}
-
-func generateTable(m *scope) (ret unitype) {
-  ret.Type = uniTable
-  ret.Value = m
-  return
-}
-
 func transformCode(xs []interface{}) []interface{} {
   hold := []interface{}{}
   for _, item := range xs {
@@ -107,6 +95,8 @@ func uni(x interface{}) (ret unitype) {
     ret = unitype{uniInt, value}
   case string:
     ret = unitype{uniString, value}
+  case *scope:
+    ret = unitype{uniTable, value}
   default: panic("not implemented")
   }
   return

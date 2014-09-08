@@ -48,6 +48,10 @@ func userCall(env *scope, xs []interface{}) (ret unitype) {
   head := env.get(xs[0:1])
   if head.Type == uniFn {
     ret = env.call(xs)
+  } else if head.Type == uniMacro {
+    ret = env.expand(xs)
+  } else {
+    panic("not handling in userCall")
   }
   return
 }

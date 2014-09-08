@@ -28,8 +28,8 @@ func (env *scope) require(xs []interface{}) (ret unitype) {
       }
       fileScope := scope{}
       exports := scope{}
-      fileScope[uni("filepath")] = generateString(filepath)
-      ret = generateTable(&exports)
+      fileScope[uni("filepath")] = uni(filepath)
+      ret = uni(&exports)
       fileScope[uni("exports")] = ret
       moduleCenter[uni(filepath)] = ret
 

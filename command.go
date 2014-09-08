@@ -13,8 +13,8 @@ func Interpret(filepath string) error {
   moduleCenter = scope{}
   fileScope := scope{}
   exports := scope{}
-  fileScope[uni("filepath")] = generateString(filepath)
-  ret := generateTable(&exports)
+  fileScope[uni("filepath")] = uni(filepath)
+  ret := uni(&exports)
   fileScope[uni("exports")] = ret
   moduleCenter[uni(filepath)] = ret
 
