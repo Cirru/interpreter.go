@@ -1,6 +1,8 @@
 
 package interpreter
 
+// import "fmt"
+
 func (env *scope) macro(xs sequence) (ret unitype) {
   ret.Type = uniMacro
   if args, ok := xs[0].(sequence); ok {
@@ -14,19 +16,20 @@ func (env *scope) expand(xs sequence) (ret unitype) {
   if macro.Type == uniMacro {
     if ctx, ok := macro.Value.(context); ok {
       runtime := scope{}
-      runtime[unitype{uniString, "outer"}] = unitype{uniTable, env}
-      for i, args := range ctx.args {
-        if t, ok := args.(token); ok {
+      runtime[uni("outer")] = uni(env)
+      for i, arg := range ctx.args {
+        if t, ok := arg.(token); ok {
           if para, ok := xs[i+1].(token); ok {
-            runtime[uni(t.Text)] = unitype{uniString, para.Text}
+            runtime[uni(t.Text)] = uni(para.Text)
           } else {
             panic("should not be expression in args")
           }
         }
       }
       for _, line := range ctx.code {
-        if exp, ok := line.([]interface{}); ok {
-          ret = Evaluate(&runtime, exp)
+        if seq, ok := line.(sequence); ok {
+          // fmt.Println(seq)
+          ret = Evaluate(&runtime, seq)
         }
       }
       return

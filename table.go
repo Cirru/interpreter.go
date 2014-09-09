@@ -1,10 +1,6 @@
 
 package interpreter
 
-import (
-  "fmt"
-)
-
 func (env *scope) table(xs sequence) (ret unitype) {
   ret.Type = uniTable
   hold := scope{}
@@ -24,63 +20,96 @@ func (env *scope) table(xs sequence) (ret unitype) {
 }
 
 func (env *scope) set(xs sequence) (ret unitype) {
-  switch len(xs) {
-  case 2:
-    value := env.get(xs[1:2])
-    if token, ok := xs[0].(token); ok {
-      (*env)[uni(token.Text)] = value
-      return value
-    }
-    if list, ok := xs[0].(sequence); ok {
-      variable := env.get(list[0:1])
-      if variable.Type == uniString {
-        if name, ok := variable.Value.(string); ok {
-          (*env)[uni(name)] = value
-          return value
-        }
-      }
-    }
-  case 3:
-    hold := env.get(xs[0:1])
-    if scope, ok := hold.Value.(*scope); ok {
-      ret = scope.set(xs[1:3])
-      return
-    }
-  default:
-    panic("parameter length not correct for set")
+  if len(xs) != 2 {
+    panic("get only accepts 2 arguemnts")
   }
-  return
+  value := env.get(xs[1:2])
+  if tok, ok := xs[0].(token); ok {
+    (*env)[uni(tok.Text)] = value
+    return value
+  } else {
+    variable := env.get([]interface{}{xs})
+    if variable.Type == uniString {
+      if name, ok := variable.Value.(string); ok {
+        (*env)[uni(name)] = value
+        return value
+      } else {
+        panic("get no string in set")
+      }
+    } else {
+      panic("and not string")
+    }
+  }
 }
 
-func (env *scope) get(xs sequence) (ret unitype) {
-  switch len(xs) {
-  case 1:
-    if token, ok := xs[0].(token); ok {
-      if value, ok := (*env)[uni(token.Text)]; ok {
-        ret = value
-        return
+func (env *scope) setTable(xs sequence) unitype {
+  if len(xs) != 3 {
+    panic("setTable accepts 3 arguemnts")
+  }
+  hold := env.get(xs[0:1])
+  if hold.Type == uniTable {
+    if area, ok := hold.Value.(*scope); ok {
+      value := env.get(xs[1:2])
+      if tok, ok := xs[0].(token); ok {
+        (*area)[uni(tok.Text)] = value
+        return value
       } else {
-        if parent, ok := (*env)[uni("parent")]; ok {
-          if scope, ok := parent.Value.(*scope); ok {
-            ret = scope.get(xs[0:1])
-            return
+        variable := env.get([]interface{}{xs})
+        if variable.Type == uniString {
+          if name, ok := variable.Value.(string); ok {
+            (*area)[uni(name)] = value
+            return value
+          } else {
+            panic("get no string in set")
           }
+        } else {
+          panic("and not string")
         }
       }
-      return unitype{uniNil, nil}
+    } else {
+      panic("not getting scope from table")
     }
-  case 2:
-    item := env.get(xs[0:1])
-    if scope, ok := item.Value.(*scope); ok {
-      ret = scope.get(xs[1:2])
-      return
+  } else {
+    panic("setTable expects a table")
+  }
+}
+
+func (env *scope) get(xs sequence) unitype {
+  if len(xs) != 1 {
+    panic("get only accepts 1 arguemnt")
+  }
+  name := xs[0]
+  if tok, ok := name.(token); ok {
+    if value, ok := (*env)[uni(tok.Text)]; ok {
+      return value
     }
-  default:
-    panic(fmt.Sprintf("length %s is not correct", len(xs)))
+    if parent, ok := (*env)[uni("parent")]; ok {
+      if p, ok := parent.Value.(*scope); ok {
+        return p.get(xs)
+      } else {
+        panic("parent is not a scope")
+      }
+    } else {
+      return uni(nil)
+    }
+  } else if seq, ok := name.(sequence); ok {
+    return Evaluate(env, seq)
   }
-  if list, ok := xs[0].(sequence); ok {
-    ret = Evaluate(env, list)
-    return
+  return uni(nil)
+}
+
+func (env *scope) getTable(xs sequence) unitype {
+  if len(xs) != 2 {
+    panic("getTable accepts 2 arguemnts")
   }
-  return
+  item := env.get(xs[0:1])
+  if item.Type == uniTable {
+    if area, ok := item.Value.(*scope); ok {
+      return area.get(xs[1:2])
+    } else {
+      panic("not getting scope from area")
+    }
+  } else {
+    panic("getTable expects a table")
+  }
 }

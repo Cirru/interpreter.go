@@ -8,8 +8,7 @@ import (
 // Evaluate read expressions and return a single result
 func Evaluate(env *scope, xs sequence) (ret unitype) {
   if len(xs) == 0 {
-    emptyArray := unitype{uniArray, xs}
-    return emptyArray
+    return uni(nil)
   }
 
   if t, ok := xs[0].(token); ok {
@@ -31,6 +30,8 @@ func Evaluate(env *scope, xs sequence) (ret unitype) {
     case "type":      ret = env._type(xs[1:])
     case "macro":     ret = env.macro(xs[1:])
     case "expand":    ret = env.expand(xs[1:])
+    case "set-table": ret = env.setTable(xs[1:])
+    case "get-table": ret = env.getTable(xs[1:])
     default:
       ret = userCall(env, xs)
     }

@@ -7,7 +7,7 @@ import (
 )
 
 func (env *scope) comment(xs sequence) (ret unitype) {
-  return unitype{uniNil, nil}
+  return uni(nil)
 }
 
 func (env *scope) _print(xs sequence) (ret unitype) {

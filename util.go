@@ -2,7 +2,6 @@
 package interpreter
 
 import (
-  "github.com/Cirru/parser"
   "github.com/Cirru/writer"
   "fmt"
 )
@@ -48,7 +47,7 @@ func showUnitype(data unitype) []interface{} {
       list := []interface{}{"table"}
       if value, ok := data.Value.(*scope); ok {
         for k, v := range *value {
-          pair := []interface{}{k, showUnitype(v)}
+          pair := []interface{}{showUnitype(k), showUnitype(v)}
           list = append(list, pair)
         }
       }
@@ -79,17 +78,21 @@ func showUnitype(data unitype) []interface{} {
 func transformCode(xs []interface{}) []interface{} {
   hold := []interface{}{}
   for _, item := range xs {
-    if buffer, ok := item.(parser.Token); ok {
+    if buffer, ok := item.(token); ok {
       hold = append(hold, buffer.Text)
-    }
-    if list, ok := item.([]interface{}); ok {
+    } else if list, ok := item.(sequence); ok {
       hold = append(hold, transformCode(list))
+    } else {
+      panic("cannot handle code item")
     }
   }
   return hold
 }
 
 func uni(x interface{}) (ret unitype) {
+  if x == nil {
+    return unitype{uniNil, nil}
+  }
   switch value := x.(type) {
   case int:
     ret = unitype{uniInt, value}
