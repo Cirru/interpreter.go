@@ -12,4 +12,3 @@ set m $ table
 set-table m b $ int 2
 
 print m
-
