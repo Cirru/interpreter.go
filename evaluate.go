@@ -30,6 +30,8 @@ func Evaluate(env *scope, xs sequence) (ret unitype) {
     case "expand":    ret = env.expand(xs[1:])
     case "set-table": ret = env.setTable(xs[1:])
     case "get-table": ret = env.getTable(xs[1:])
+    case "if":        ret = env._if(xs[1:])
+    case "block":     ret = env.block(xs[1:])
     default:
       ret = userCall(env, xs)
     }

@@ -16,6 +16,7 @@ func TestCommand(t *testing.T) {
     "stdio.cirru",
     "function.cirru",
     "macro.cirru",
+    "ctrl.cirru",
   }
   for _, filename := range filenames {
     filepath := path.Join("cirru/", filename)

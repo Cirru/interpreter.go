@@ -24,5 +24,5 @@ func (env *scope) _print(xs sequence) (ret unitype) {
     }
   }
   fmt.Println(strings.Join(outList, ""))
-  return
+  return uni(nil)
 }
