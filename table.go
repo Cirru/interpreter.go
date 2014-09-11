@@ -10,7 +10,7 @@ func (env *scope) getKey(x interface{}) unitype {
   } else if seq, ok := x.(sequence); ok {
     key = Evaluate(env, seq)
   } else {
-    panic("getKey excepts code")
+    panic("getKey expects code")
   }
   if key.Type == uniNil {
     panic("got nil key")
@@ -30,7 +30,7 @@ func (env *scope) getValue(x interface{}) unitype {
     value := Evaluate(env, seq)
     return value
   }
-  panic("getValue excepts code")
+  panic("getValue expects code")
 }
 
 func (env *scope) getScope(x interface{}) unitype {
@@ -52,7 +52,7 @@ func (env *scope) table(xs sequence) (ret unitype) {
   for _, item := range xs {
     pair, ok := item.(sequence)
     if !ok {
-      panic("table excepts sequence")
+      panic("table expects sequence")
     }
     key := env.getKey(pair[0])
     value := env.getValue(pair[1])

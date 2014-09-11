@@ -3,7 +3,7 @@ package interpreter
 
 import "fmt"
 
-// Evaluate read expressions and return a single result
+// Evaluate expressions and return a unitype value
 func Evaluate(env *scope, xs sequence) (ret unitype) {
   if len(xs) == 0 {
     return uni(nil)

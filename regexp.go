@@ -8,7 +8,7 @@ import (
 func (env *scope) regexp(xs sequence) (ret unitype) {
   tok, ok := xs[0].(token)
   if !ok {
-    panic("regexp excepts token")
+    panic("regexp expects token")
   }
   reg, err := regexp.Compile(tok.Text)
   if err != nil {

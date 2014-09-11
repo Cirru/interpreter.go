@@ -7,7 +7,7 @@ func (env *scope) macro(xs sequence) (ret unitype) {
   ret.Type = uniMacro
   args, ok := xs[0].(sequence)
   if !ok {
-   panic("macro excepts args in sequence")
+   panic("macro expects args in sequence")
   }
   code := xs[1:]
   ret.Value = context{env, args, code}
@@ -26,7 +26,7 @@ func (env *scope) expand(xs sequence) (ret unitype) {
     key := env.getKey(arg)
     tok, ok := xs[i+1].(token)
     if !ok {
-      panic("expand excepts token arguments")
+      panic("expand expects token arguments")
     }
     (*runtime)[key] = uni(tok.Text)
   }

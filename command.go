@@ -1,6 +1,5 @@
 
-// Package cirruGopher is a small interpreter of parser.
-// It is based on `parser`.
+// A tiny interpreter of Cirru.
 package interpreter
 
 import (
@@ -8,7 +7,7 @@ import (
   "github.com/Cirru/parser"
 )
 
-// Interpret takes result from `parser.Parse` and run in context.
+// Reads file and evaluate.
 func Interpret(filepath string) error {
   moduleCenter = scope{}
   fileScope := scope{}

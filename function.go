@@ -5,7 +5,7 @@ func (env *scope) fn(xs sequence) (ret unitype) {
   ret.Type = uniFn
   args, ok := xs[0].(sequence)
   if !ok {
-    panic("function excepts args in sequence")
+    panic("function expects args in sequence")
   }
   ret.Value = context{env, args, xs[1:]}
   return
