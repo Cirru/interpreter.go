@@ -6,27 +6,29 @@ import (
 )
 
 func (env *scope) _int(xs sequence) (ret unitype) {
-  if t, ok := xs[0].(token); ok {
-    intNumber, err := strconv.Atoi(t.Text)
-    if err != nil {
-      panic(err)
-    }
-    ret.Type = uniInt
-    ret.Value = intNumber
-  } else {
-    panic("can not parse as number")
+  tok, ok := xs[0].(token);
+  if !ok {
+    panic("int excepts token")
   }
+  value, err := strconv.Atoi(tok.Text)
+  if err != nil {
+    panic(err)
+  }
+  ret.Type = uniInt
+  ret.Value = value
   return
 }
 
-func (env *scope) _float(xs sequence) (ret unitype) {
-  if t, ok := xs[0].(token); ok {
-    floatNumber, err := strconv.ParseFloat(t.Text, 64)
-    if err != nil {
-      panic(err)
-    }
-    ret.Type = uniFloat
-    ret.Value = floatNumber
+func (env *scope) float(xs sequence) (ret unitype) {
+  tok, ok := xs[0].(token)
+  if !ok {
+    panic("float excepts token")
   }
+  value, err := strconv.ParseFloat(tok.Text, 64)
+  if err != nil {
+    panic(err)
+  }
+  ret.Type = uniFloat
+  ret.Value = value
   return
 }

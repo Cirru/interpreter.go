@@ -3,17 +3,15 @@ package interpreter
 
 func (env *scope) _bool(xs sequence) (ret unitype) {
   ret.Type = uniBool
-  ret.Value = false
-  if token, ok := xs[0].(token); ok {
-    trueValues := []string{"true", "yes", "right", "1"}
-    for _, text := range trueValues {
-      if text == token.Text {
-        ret.Value = true
-      }
-    }
-    return
-  } else {
+  tok, ok := xs[0].(token)
+  if !ok {
     panic("failed to parse bool")
+  }
+  switch tok.Text {
+  case "true", "yes", "right", "1":
+    ret.Value = true
+  default:
+    ret.Value = false
   }
   return
 }

@@ -13,7 +13,7 @@ print
       a $ int 5
       b $ int 6
       c $ table
-        int 7
+        x $ int 7
 
 print
   array
@@ -44,7 +44,7 @@ print $ fn ()
       int a
 
 set container (table)
-set container f $ fn ()
+set-table container f $ fn ()
   set a 1
   print (get a)
   print $ array

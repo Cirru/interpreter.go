@@ -24,7 +24,7 @@ func (env *scope) expand(xs sequence) (ret unitype) {
   (*runtime)[uni("outer")] = uni(env)
   for i, arg := range ctx.args {
     key := env.getKey(arg)
-    tok, ok := xs[i].(token)
+    tok, ok := xs[i+1].(token)
     if !ok {
       panic("expand excepts token arguments")
     }

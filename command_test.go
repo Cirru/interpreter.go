@@ -3,16 +3,20 @@ package interpreter
 import (
   "testing"
   "path"
-  "io/ioutil"
 )
 
 func TestCommand(t *testing.T) {
-  files, _ := ioutil.ReadDir("cirru/")
-  filenames := []string{}
-  for _, file := range files {
-    filenames = append(filenames, file.Name())
+  filenames := []string{
+    "array.cirru",
+    "bool.cirru",
+    "number.cirru",
+    "regexp.cirru",
+    "string.cirru",
+    "table.cirru",
+    "stdio.cirru",
+    "function.cirru",
+    "macro.cirru",
   }
-  filenames = []string{"array.cirru"}
   for _, filename := range filenames {
     filepath := path.Join("cirru/", filename)
     println()

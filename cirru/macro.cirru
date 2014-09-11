@@ -7,10 +7,6 @@ set swap $ macro (a b)
 set x $ int 1
 set y $ int 2
 
-print x y
-
-print (string "ok with set")
-
 expand swap x y
 print x y
 

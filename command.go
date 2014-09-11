@@ -33,9 +33,8 @@ func Interpret(filepath string) error {
   ast := toSequence(p.ToArray())
 
   for _, line := range ast {
-    if list, ok := line.(sequence); ok {
-      Evaluate(&fileScope, list)
-    }
+    seq, _ := line.(sequence)
+    Evaluate(&fileScope, seq)
   }
   return nil
 }

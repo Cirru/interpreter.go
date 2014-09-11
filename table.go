@@ -1,7 +1,7 @@
 
 package interpreter
 
-// import "fmt"
+import "fmt"
 
 func (env *scope) getKey(x interface{}) unitype {
   var key unitype
@@ -19,13 +19,18 @@ func (env *scope) getKey(x interface{}) unitype {
 }
 
 func (env *scope) getValue(x interface{}) unitype {
-  key := env.getKey(x)
-  // value
-  if value, ok := (*env)[key]; ok {
+  if tok, ok := x.(token); ok {
+    value, ok := (*env)[uni(tok.Text)]
+    if !ok {
+      fmt.Println(tok.Text)
+      panic("get nil result")
+    }
     return value
-  } else {
-    return uni(nil)
+  } else if seq, ok := x.(sequence); ok {
+    value := Evaluate(env, seq)
+    return value
   }
+  panic("getValue excepts code")
 }
 
 func (env *scope) getScope(x interface{}) unitype {
@@ -58,7 +63,12 @@ func (env *scope) table(xs sequence) (ret unitype) {
 
 func (env *scope) get(xs sequence) unitype {
   assertLen(xs, 1)
-  return env.getValue(xs[0])
+  key := env.getKey(xs[0])
+  if value, ok := (*env)[key]; ok {
+    return value
+  } else {
+    return uni(nil)
+  }
 }
 
 func (env *scope) set(xs sequence) (ret unitype) {

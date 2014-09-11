@@ -1,9 +1,7 @@
 
 package interpreter
 
-import (
-  "fmt"
-)
+import "fmt"
 
 // Evaluate read expressions and return a single result
 func Evaluate(env *scope, xs sequence) (ret unitype) {
@@ -11,14 +9,14 @@ func Evaluate(env *scope, xs sequence) (ret unitype) {
     return uni(nil)
   }
 
-  if t, ok := xs[0].(token); ok {
-    switch t.Text {
+  if tok, ok := xs[0].(token); ok {
+    switch tok.Text {
     case "--":        ret = env.comment(xs[1:])
     case "array":     ret = env.array(xs[1:])
     case "fn":        ret = env.fn(xs[1:])
     case "bool":      ret = env._bool(xs[1:])
     case "call":      ret = env.call(xs[1:])
-    case "float":     ret = env._float(xs[1:])
+    case "float":     ret = env.float(xs[1:])
     case "get":       ret = env.get(xs[1:])
     case "int":       ret = env._int(xs[1:])
     case "table":     ret = env.table(xs[1:])
@@ -35,23 +33,21 @@ func Evaluate(env *scope, xs sequence) (ret unitype) {
     default:
       ret = userCall(env, xs)
     }
-    return
-  }
-  if headExpression, ok := xs[0].(sequence); ok {
-    fmt.Println(headExpression)
-    return
+  } else if _, ok := xs[0].(sequence); ok {
+    ret = userCall(env, xs)
   }
   return
 }
 
 func userCall(env *scope, xs sequence) (ret unitype) {
-  head := env.get(xs[0:1])
+  head := env.getValue(xs[0])
   if head.Type == uniFn {
     ret = env.call(xs)
   } else if head.Type == uniMacro {
     ret = env.expand(xs)
   } else {
-    panic("not handling in userCall")
+    fmt.Println(xs, head, *env)
+    panic("can not find handler")
   }
   return
 }

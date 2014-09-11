@@ -2,18 +2,20 @@
 package interpreter
 
 import (
-  "github.com/Cirru/writer"
+  "strings"
 )
 
 func (env *scope) _string(xs sequence) (ret unitype) {
-  if token, ok := xs[0].(token); ok {
-    ret.Type = uniString
-    ret.Value = token.Text
+  pieces := []string{}
+  for _, piece := range xs {
+    key := env.getKey(piece)
+    if key.Type != uniString {
+      panic("not a piece of string")
+    }
+    str, _ := key.Value.(string)
+    pieces = append(pieces, str)
   }
-  if list, ok := xs[0].(sequence); ok {
-    ret.Type = uniString
-    lines := sequence{transformCode(list)}
-    ret.Value = writer.MakeCode(lines)
-  }
+  ret.Type = uniString
+  ret.Value = strings.Join(pieces, " ")
   return
 }
