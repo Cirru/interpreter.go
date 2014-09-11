@@ -14,15 +14,13 @@ func (env *scope) _print(xs sequence) (ret unitype) {
   outList := []string{}
   for _, value := range xs {
     if t, ok := value.(token); ok {
-      list := sequence{}
-      list = append(list, t)
-      unit := stringifyUnitype(env.get(list))
-      outList = append(outList, unit)
-    } else if list, ok := value.(sequence); ok {
-      calculated := Evaluate(env, list)
-      // fmt.Println("value is:", calculated)
-      unit := stringifyUnitype(calculated)
-      outList = append(outList, unit)
+      seq := sequence{}
+      seq = append(seq, t)
+      piece := stringifyUnitype(env.get(seq))
+      outList = append(outList, piece)
+    } else if seq, ok := value.(sequence); ok {
+      piece := stringifyUnitype(Evaluate(env, seq))
+      outList = append(outList, piece)
     }
   }
   fmt.Println(strings.Join(outList, ""))

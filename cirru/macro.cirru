@@ -9,6 +9,8 @@ set y $ int 2
 
 print x y
 
+print (string "ok with set")
+
 expand swap x y
 print x y
 

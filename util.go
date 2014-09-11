@@ -37,10 +37,9 @@ func showUnitype(data unitype) []interface{} {
       }
     case uniArray:
       list := []interface{}{"array"}
-      if value, ok := data.Value.(*map[unitype]unitype); ok {
-        for _, item := range *value {
-          list = append(list, showUnitype(item))
-        }
+      value, _ := data.Value.(*map[unitype]unitype)
+      for _, item := range *value {
+        list = append(list, showUnitype(item))
       }
       return list
     case uniTable:
@@ -103,4 +102,10 @@ func uni(x interface{}) (ret unitype) {
   default: panic("not implemented")
   }
   return
+}
+
+func assertLen(xs []interface{}, n int) {
+  if len(xs) != n {
+    panic(fmt.Sprintf("length not equal to %d", n))
+  }
 }

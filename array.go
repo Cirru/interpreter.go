@@ -3,10 +3,10 @@ package interpreter
 
 func (env *scope) array(xs sequence) (ret unitype) {
   ret.Type = uniArray
-  hold := map[unitype]unitype{}
+  list := &map[unitype]unitype{}
   for index, item := range xs {
-    hold[uni(index)] = env.get(sequence{item})
+    (*list)[uni(index)] = env.getValue(item)
   }
-  ret.Value = &hold
+  ret.Value = list
   return
 }

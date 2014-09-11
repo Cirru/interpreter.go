@@ -1,115 +1,88 @@
 
 package interpreter
 
+// import "fmt"
+
+func (env *scope) getKey(x interface{}) unitype {
+  var key unitype
+  if tok, ok := x.(token); ok {
+    key = uni(tok.Text)
+  } else if seq, ok := x.(sequence); ok {
+    key = Evaluate(env, seq)
+  } else {
+    panic("getKey excepts code")
+  }
+  if key.Type == uniNil {
+    panic("got nil key")
+  }
+  return key
+}
+
+func (env *scope) getValue(x interface{}) unitype {
+  key := env.getKey(x)
+  // value
+  if value, ok := (*env)[key]; ok {
+    return value
+  } else {
+    return uni(nil)
+  }
+}
+
+func (env *scope) getScope(x interface{}) unitype {
+  key := env.getKey(x)
+  value, ok := (*env)[key]
+  if !ok {
+    panic("get nil rather than scope")
+  }
+  if value.Type != uniTable {
+    panic("value is not a scope")
+  }
+  return value
+}
+
 func (env *scope) table(xs sequence) (ret unitype) {
   ret.Type = uniTable
-  hold := scope{}
+  hold := &scope{}
+  ret.Value = hold
   for _, item := range xs {
-    if pair, ok := item.(sequence); ok {
-      name := pair[0]
-      var key string
-      if token, ok := name.(token); ok {
-        key = token.Text
-      }
-      value := env.get(pair[1:2])
-      hold[uni(key)] = value
+    pair, ok := item.(sequence)
+    if !ok {
+      panic("table excepts sequence")
     }
+    key := env.getKey(pair[0])
+    value := env.getValue(pair[1])
+    (*hold)[key] = value
   }
-  ret.Value = &hold
   return
 }
 
+func (env *scope) get(xs sequence) unitype {
+  assertLen(xs, 1)
+  return env.getValue(xs[0])
+}
+
 func (env *scope) set(xs sequence) (ret unitype) {
-  if len(xs) != 2 {
-    panic("get only accepts 2 arguemnts")
-  }
-  value := env.get(xs[1:2])
-  if tok, ok := xs[0].(token); ok {
-    (*env)[uni(tok.Text)] = value
-    return value
-  } else {
-    variable := env.get([]interface{}{xs})
-    if variable.Type == uniString {
-      if name, ok := variable.Value.(string); ok {
-        (*env)[uni(name)] = value
-        return value
-      } else {
-        panic("get no string in set")
-      }
-    } else {
-      panic("and not string")
-    }
-  }
+  assertLen(xs, 2)
+  key := env.getKey(xs[0])
+  value := env.getValue(xs[1])
+  (*env)[key] = value
+  return value
 }
 
 func (env *scope) setTable(xs sequence) unitype {
-  if len(xs) != 3 {
-    panic("setTable accepts 3 arguemnts")
-  }
-  hold := env.get(xs[0:1])
-  if hold.Type == uniTable {
-    if area, ok := hold.Value.(*scope); ok {
-      value := env.get(xs[1:2])
-      if tok, ok := xs[0].(token); ok {
-        (*area)[uni(tok.Text)] = value
-        return value
-      } else {
-        variable := env.get([]interface{}{xs})
-        if variable.Type == uniString {
-          if name, ok := variable.Value.(string); ok {
-            (*area)[uni(name)] = value
-            return value
-          } else {
-            panic("get no string in set")
-          }
-        } else {
-          panic("and not string")
-        }
-      }
-    } else {
-      panic("not getting scope from table")
-    }
-  } else {
-    panic("setTable expects a table")
-  }
-}
-
-func (env *scope) get(xs sequence) unitype {
-  if len(xs) != 1 {
-    panic("get only accepts 1 arguemnt")
-  }
-  name := xs[0]
-  if tok, ok := name.(token); ok {
-    if value, ok := (*env)[uni(tok.Text)]; ok {
-      return value
-    }
-    if parent, ok := (*env)[uni("parent")]; ok {
-      if p, ok := parent.Value.(*scope); ok {
-        return p.get(xs)
-      } else {
-        panic("parent is not a scope")
-      }
-    } else {
-      return uni(nil)
-    }
-  } else if seq, ok := name.(sequence); ok {
-    return Evaluate(env, seq)
-  }
-  return uni(nil)
+  assertLen(xs, 3)
+  target := env.getScope(xs[0])
+  key := env.getKey(xs[1])
+  value := env.getValue(xs[2])
+  area, _ := target.Value.(*scope)
+  (*area)[key] = value
+  return value
 }
 
 func (env *scope) getTable(xs sequence) unitype {
-  if len(xs) != 2 {
-    panic("getTable accepts 2 arguemnts")
-  }
-  item := env.get(xs[0:1])
-  if item.Type == uniTable {
-    if area, ok := item.Value.(*scope); ok {
-      return area.get(xs[1:2])
-    } else {
-      panic("not getting scope from area")
-    }
-  } else {
-    panic("getTable expects a table")
-  }
+  assertLen(xs, 2)
+  target := env.getScope(xs[0])
+  key := env.getKey(xs[1])
+  area, _ := target.Value.(*scope)
+  return (*area)[key]
 }

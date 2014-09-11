@@ -12,7 +12,7 @@ func TestCommand(t *testing.T) {
   for _, file := range files {
     filenames = append(filenames, file.Name())
   }
-  filenames = []string{"macro.cirru"}
+  filenames = []string{"array.cirru"}
   for _, filename := range filenames {
     filepath := path.Join("cirru/", filename)
     println()

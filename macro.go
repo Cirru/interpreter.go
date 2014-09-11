@@ -5,37 +5,34 @@ package interpreter
 
 func (env *scope) macro(xs sequence) (ret unitype) {
   ret.Type = uniMacro
-  if args, ok := xs[0].(sequence); ok {
-    ret.Value = context{env, args, xs[1:]}
+  args, ok := xs[0].(sequence)
+  if !ok {
+   panic("macro excepts args in sequence")
   }
+  code := xs[1:]
+  ret.Value = context{env, args, code}
   return
 }
 
 func (env *scope) expand(xs sequence) (ret unitype) {
-  macro := env.get(xs[0:1])
-  if macro.Type == uniMacro {
-    if ctx, ok := macro.Value.(context); ok {
-      runtime := scope{}
-      runtime[uni("outer")] = uni(env)
-      for i, arg := range ctx.args {
-        if t, ok := arg.(token); ok {
-          if para, ok := xs[i+1].(token); ok {
-            runtime[uni(t.Text)] = uni(para.Text)
-          } else {
-            panic("should not be expression in args")
-          }
-        }
-      }
-      for _, line := range ctx.code {
-        if seq, ok := line.(sequence); ok {
-          // fmt.Println(seq)
-          ret = Evaluate(&runtime, seq)
-        }
-      }
-      return
-    }
-  } else {
+  macro := env.getValue(xs[0])
+  if macro.Type != uniMacro {
     panic("not macro")
+  }
+  ctx, _ := macro.Value.(context)
+  runtime := &scope{}
+  (*runtime)[uni("outer")] = uni(env)
+  for i, arg := range ctx.args {
+    key := env.getKey(arg)
+    tok, ok := xs[i].(token)
+    if !ok {
+      panic("expand excepts token arguments")
+    }
+    (*runtime)[key] = uni(tok.Text)
+  }
+  for _, line := range ctx.code {
+    seq, _ := line.(sequence)
+    ret = Evaluate(runtime, seq)
   }
   return
 }
