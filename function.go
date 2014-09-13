@@ -5,13 +5,11 @@ package interpreter
 
 func (env *scope) fn(xs sequence) (ret unitype) {
   ret.Type = uniFn
-  closure := &scope{}
-  (*closure)[uni("parent")] = uni(env)
   args, ok := xs[0].(sequence)
   if !ok {
     panic("function expects args in sequence")
   }
-  ret.Value = context{closure, args, xs[1:]}
+  ret.Value = context{env, args, xs[1:]}
   return
 }
 
@@ -21,7 +19,8 @@ func (env *scope) call(xs sequence) (ret unitype) {
     panic("calling a non-function")
   }
   ctx, _ := fn.Value.(context)
-  runtime := ctx.closure
+  runtime := &scope{}
+  (*runtime)[uni("parent")] = uni(ctx.closure)
   (*runtime)[uni("outer")] = uni(env)
   for i, arg := range ctx.args {
     tok, _ := arg.(token)
@@ -45,7 +44,8 @@ func (env *scope) method(xs sequence) (ret unitype) {
     return item
   }
   ctx, _ := item.Value.(context)
-  runtime := ctx.closure
+  runtime := &scope{}
+  (*runtime)[uni("parent")] = uni(ctx.closure)
   (*runtime)[uni("outer")] = uni(env)
   (*runtime)[uni("this")] = uni(area)
   for i, arg := range ctx.args {

@@ -26,7 +26,7 @@ func (env *scope) getValue(x interface{}) unitype {
     }
     parent, ok := (*env)[uni("parent")]
     if !ok {
-      panic("get nil result")
+      panic(fmt.Sprintf("get nil result with %s", tok.Text))
     }
     area, ok := parent.Value.(*scope)
     if ok {

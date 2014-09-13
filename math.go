@@ -4,13 +4,19 @@ package interpreter
 func (env *scope) add(xs sequence) unitype {
   sum := 0.0
   for _, item := range xs {
-    value := env.getValue(item)
-    switch v := value.Value.(type) {
-    case float64: sum = sum + v
-    default: panic("can not add this types to number")
-    }
+    value, _ := env.getValue(item).Value.(float64)
+    sum += value
   }
   return uni(sum)
+}
+
+func (env *scope) minus(xs sequence) unitype {
+  lastValue, _ := env.getValue(xs[0]).Value.(float64)
+  for _, item := range xs[1:] {
+    value, _ := env.getValue(item).Value.(float64)
+    lastValue -= value
+  }
+  return uni(lastValue)
 }
 
 func (env *scope) equal(xs sequence) unitype {
