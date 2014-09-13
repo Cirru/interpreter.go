@@ -15,7 +15,6 @@ func (env *scope) _type(xs sequence) (ret unitype) {
     case 6: ret.Value = "array"
     case 7: ret.Value = "fn"
     case 8: ret.Value = "nil"
-    case 9: ret.Value = "macro"
     default: panic("unknow type")
     }
     ret.Value = value.Type

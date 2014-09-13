@@ -26,8 +26,6 @@ func Evaluate(env *scope, xs sequence) (ret unitype) {
     case "set":       ret = env.set(xs[1:])
     case "string":    ret = env._string(xs[1:])
     case "type":      ret = env._type(xs[1:])
-    case "macro":     ret = env.macro(xs[1:])
-    case "expand":    ret = env.expand(xs[1:])
     case "set-table": ret = env.setTable(xs[1:])
     case "get-table": ret = env.getTable(xs[1:])
     case "if":        ret = env._if(xs[1:])
@@ -45,8 +43,6 @@ func userCall(env *scope, xs sequence) (ret unitype) {
   head := env.getValue(xs[0])
   if head.Type == uniFn {
     ret = env.call(xs)
-  } else if head.Type == uniMacro {
-    ret = env.expand(xs)
   } else {
     fmt.Println(xs, head, *env)
     panic("can not find handler")

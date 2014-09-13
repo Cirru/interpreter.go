@@ -15,7 +15,6 @@ const (
   uniArray
   uniFn
   uniNil
-  uniMacro
 )
 
 type unitype struct {

@@ -16,18 +16,15 @@ func (env *scope) call(xs sequence) (ret unitype) {
   if fn.Type != uniFn {
     panic("calling a non-function")
   }
-  item, _ := fn.Value.(context)
+  ctx, _ := fn.Value.(context)
   runtime := &scope{}
-  for i, arg := range item.args {
+  (*runtime)[uni("outer")] = uni(env)
+  for i, arg := range ctx.args {
     tok, _ := arg.(token)
     (*runtime)[uni(tok.Text)] = env.getValue(xs[i+1])
   }
-  for _, line := range item.code {
-    if exp, ok := line.(sequence); ok {
-      ret = Evaluate(runtime, exp)
-    } else {
-      panic("calling not sequence")
-    }
+  for _, line := range ctx.code {
+    ret = runtime.getValue(line)
   }
   return
 }

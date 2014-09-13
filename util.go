@@ -60,12 +60,6 @@ func showUnitype(data unitype) []interface{} {
         code := transformCode(fnContext.code)
         return []interface{}{"fn", args, code}
       }
-    case uniMacro:
-      if macContext, ok := data.Value.(context); ok {
-        args := transformCode(macContext.args)
-        code := transformCode(macContext.code)
-        return []interface{}{"macro", args, code}
-      }
     case uniNil:
       return []interface{}{"nil"}
     default:

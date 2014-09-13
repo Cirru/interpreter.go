@@ -7,16 +7,15 @@ import (
 
 func TestCommand(t *testing.T) {
   filenames := []string{
-    // "array.cirru",
-    // "bool.cirru",
-    // "number.cirru",
-    // "regexp.cirru",
-    // "string.cirru",
-    // "table.cirru",
-    // "stdio.cirru",
-    // "function.cirru",
-    // "macro.cirru",
-    // "ctrl.cirru",
+    "array.cirru",
+    "bool.cirru",
+    "number.cirru",
+    "regexp.cirru",
+    "string.cirru",
+    "table.cirru",
+    "stdio.cirru",
+    "function.cirru",
+    "ctrl.cirru",
     "require.cirru",
   }
   for _, filename := range filenames {
