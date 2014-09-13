@@ -18,11 +18,6 @@ func showUnitype(data unitype) []interface{} {
       if stringValue, ok := data.Value.(string); ok {
         return []interface{}{"string", stringValue}
       }
-    case uniInt:
-      if value, ok := data.Value.(int); ok {
-        str := fmt.Sprintf("%d", value)
-        return []interface{}{"int", str}
-      }
     case uniFloat:
       if value, ok := data.Value.(float64); ok {
         str := fmt.Sprintf("%g", value)
@@ -87,19 +82,15 @@ func uni(x interface{}) (ret unitype) {
     return unitype{uniNil, nil}
   }
   switch value := x.(type) {
-  case int:
-    ret = unitype{uniInt, value}
+  case float64:
+    ret = unitype{uniFloat, value}
   case string:
     ret = unitype{uniString, value}
+  case bool:
+    ret = unitype{uniBool, value}
   case *scope:
     ret = unitype{uniTable, value}
-  default: panic("not implemented")
+  default: panic("not implemented in uni")
   }
   return
-}
-
-func assertLen(xs []interface{}, n int) {
-  if len(xs) != n {
-    panic(fmt.Sprintf("length not equal to %d", n))
-  }
 }

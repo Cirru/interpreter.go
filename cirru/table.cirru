@@ -1,14 +1,14 @@
 
 print $ table
-  a $ int 5
-  b $ array (int 1) (int 2)
+  a $ float 5
+  b $ array (float 1) (float 2)
   c $ table
-    x $ int 1
-    y $ array (int 4)
+    x $ float 1
+    y $ array (float 4)
 
 set m $ table
-  a $ int 1
+  a $ float 1
 
-set-table m b $ int 2
+set-table m b $ float 2
 
 print m

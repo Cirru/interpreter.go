@@ -7,23 +7,25 @@ import (
 
 func TestCommand(t *testing.T) {
   filenames := []string{
-    // "array.cirru",
-    // "bool.cirru",
-    // "number.cirru",
-    // "regexp.cirru",
-    // "string.cirru",
-    // "table.cirru",
-    // "stdio.cirru",
-    // "function.cirru",
-    // "macro.cirru",
-    // "ctrl.cirru",
+    "array.cirru",
+    "bool.cirru",
+    "number.cirru",
+    "regexp.cirru",
+    "string.cirru",
+    "table.cirru",
+    "stdio.cirru",
+    "function.cirru",
+    "macro.cirru",
+    "ctrl.cirru",
     "require.cirru",
-    // "method.cirru",
+    "method.cirru",
+    "closure.cirru",
+    "math.cirru",
   }
   for _, filename := range filenames {
     filepath := path.Join("cirru/", filename)
     println()
-    println("---> Running for:", filepath)
+    println("---- Interpreting:", filepath)
     println()
     Interpret(filepath)
   }

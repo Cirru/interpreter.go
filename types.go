@@ -6,8 +6,7 @@ import "github.com/Cirru/parser"
 type unitypeName int
 
 const (
-  uniInt unitypeName = iota
-  uniFloat
+  uniFloat unitypeName = iota
   uniBool
   uniString
   uniRegexp
@@ -23,7 +22,7 @@ type unitype struct {
 }
 
 type context struct {
-  env *scope
+  closure *scope
   args sequence
   code sequence
 }

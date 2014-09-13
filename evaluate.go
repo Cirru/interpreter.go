@@ -18,7 +18,6 @@ func Evaluate(env *scope, xs sequence) (ret unitype) {
     case "call":      ret = env.call(xs[1:])
     case "float":     ret = env.float(xs[1:])
     case "get":       ret = env.get(xs[1:])
-    case "int":       ret = env._int(xs[1:])
     case "table":     ret = env.table(xs[1:])
     case "print":     ret = env._print(xs[1:])
     case "regexp":    ret = env.regexp(xs[1:])
@@ -30,6 +29,14 @@ func Evaluate(env *scope, xs sequence) (ret unitype) {
     case "get-table": ret = env.getTable(xs[1:])
     case "if":        ret = env._if(xs[1:])
     case "block":     ret = env.block(xs[1:])
+    case "self":      ret = env.self(xs[1:])
+    case "add":       ret = env.add(xs[1:])
+    case "+":         ret = env.add(xs[1:])
+    case "=":         ret = env.equal(xs[1:])
+    case ">":         ret = env.greatThan(xs[1:])
+    case "<":         ret = env.littleThan(xs[1:])
+    case ">=":        ret = env.greatEqual(xs[1:])
+    case "<=":        ret = env.littleEqual(xs[1:])
     default:
       ret = userCall(env, xs)
     }
