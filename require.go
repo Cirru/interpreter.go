@@ -1,4 +1,5 @@
 
+// A tiny interpreter of Cirru.
 package interpreter
 
 import (
@@ -30,6 +31,14 @@ func (env *scope) require(xs sequence) (ret unitype) {
     moduleRoot := os.Getenv("cirru_path")
     filepath = path.Join(moduleRoot, name)
   }
+  return Interpret(filepath)
+}
+
+// Reads file and evaluate.
+func Interpret(filepath string) (ret unitype) {
+  if moduleCenter == nil {
+    moduleCenter = scope{}
+  }
   fileScope := &scope{}
   exports := &scope{}
   (*fileScope)[uni("filepath")] = uni(filepath)
@@ -41,6 +50,7 @@ func (env *scope) require(xs sequence) (ret unitype) {
   if err != nil {
     panic(err)
   }
+
   p := parser.NewParser()
   p.Filename(filepath)
   for _, c := range codeByte {
@@ -50,8 +60,20 @@ func (env *scope) require(xs sequence) (ret unitype) {
   ast := toSequence(p.ToArray())
 
   for _, line := range ast {
-    seq, _ := line.(sequence)
-    Evaluate(fileScope, seq)
+    fileScope.getValue(line)
+  }
+  return
+}
+
+func toSequence(xs []interface{}) (ret sequence) {
+  for _, child := range xs {
+    if seq, ok := child.([]interface{}); ok {
+      ret = append(ret, toSequence(seq))
+    } else if t, ok := child.(parser.Token); ok {
+      ret = append(ret, token(t))
+    } else {
+      panic("got unknown type from code")
+    }
   }
   return
 }

@@ -17,17 +17,14 @@ func TestCommand(t *testing.T) {
     // "function.cirru",
     // "macro.cirru",
     // "ctrl.cirru",
-    // "require.cirru",
-    "method.cirru",
+    "require.cirru",
+    // "method.cirru",
   }
   for _, filename := range filenames {
     filepath := path.Join("cirru/", filename)
     println()
     println("---> Running for:", filepath)
     println()
-    err := Interpret(filepath)
-    if err != nil {
-      t.Errorf("Runtime error", err)
-    }
+    Interpret(filepath)
   }
 }
