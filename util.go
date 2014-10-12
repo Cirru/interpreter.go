@@ -39,7 +39,7 @@ func showUnitype(data unitype) []interface{} {
       return list
     case uniTable:
       list := []interface{}{"table"}
-      if value, ok := data.Value.(*scope); ok {
+      if value, ok := data.Value.(*mapping); ok {
         for k, v := range *value {
           pair := []interface{}{showUnitype(k), showUnitype(v)}
           list = append(list, pair)
@@ -93,4 +93,16 @@ func uni(x interface{}) (ret unitype) {
   default: panic("not implemented in uni")
   }
   return
+}
+
+func newFileScope() *scope {
+  obj := &object{}
+  scp := &scope{}
+  scp.closure = obj
+  return scp
+}
+
+func newScope(parent *scope) *scope {
+  obj := &object{}
+  return &scope{parent, obj}
 }

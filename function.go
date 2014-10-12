@@ -19,12 +19,10 @@ func (env *scope) call(xs sequence) (ret unitype) {
     panic("calling a non-function")
   }
   ctx, _ := fn.Value.(context)
-  runtime := &scope{}
-  (*runtime)[uni("parent")] = uni(ctx.closure)
-  (*runtime)[uni("outer")] = uni(env)
+  runtime := newScope(ctx.closure)
   for i, arg := range ctx.args {
     tok, _ := arg.(token)
-    (*runtime)[uni(tok.Text)] = env.getValue(xs[i+1])
+    (*runtime.closure)[tok.Text] = env.getValue(xs[i+1])
   }
   ret = uni(nil)
   for _, line := range ctx.code {
@@ -44,13 +42,10 @@ func (env *scope) method(xs sequence) (ret unitype) {
     return item
   }
   ctx, _ := item.Value.(context)
-  runtime := &scope{}
-  (*runtime)[uni("parent")] = uni(ctx.closure)
-  (*runtime)[uni("outer")] = uni(env)
-  (*runtime)[uni("this")] = uni(area)
+  runtime := newScope(ctx.closure)
   for i, arg := range ctx.args {
     tok, _ := arg.(token)
-    (*runtime)[uni(tok.Text)] = env.getValue(xs[i+1])
+    runtime.setValue(tok.Text, env.getValue(xs[i+1]))
   }
   ret = uni(nil)
   for _, line := range ctx.code {

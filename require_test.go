@@ -15,7 +15,6 @@ func TestCommand(t *testing.T) {
     "table.cirru",
     "stdio.cirru",
     "function.cirru",
-    "macro.cirru",
     "ctrl.cirru",
     "require.cirru",
     "method.cirru",

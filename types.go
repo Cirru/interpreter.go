@@ -27,7 +27,14 @@ type context struct {
   code sequence
 }
 
-type scope map[unitype]unitype
+type object map[string]unitype
+
+type scope struct {
+  parent *scope
+  closure *object
+}
+
+type mapping map[unitype]unitype
 
 type sequence []interface{}
 

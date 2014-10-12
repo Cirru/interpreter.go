@@ -8,12 +8,8 @@ import (
 func (env *scope) _string(xs sequence) (ret unitype) {
   pieces := []string{}
   for _, piece := range xs {
-    key := env.getKey(piece)
-    if key.Type != uniString {
-      panic("not a piece of string")
-    }
-    str, _ := key.Value.(string)
-    pieces = append(pieces, str)
+    key := env.getSymbol(piece)
+    pieces = append(pieces, key)
   }
   ret.Type = uniString
   ret.Value = strings.Join(pieces, " ")

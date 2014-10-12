@@ -8,7 +8,7 @@ func (env *scope) _bool(xs sequence) (ret unitype) {
     panic("failed to parse bool")
   }
   switch tok.Text {
-  case "true", "yes", "right", "1":
+  case "true", "yes":
     ret.Value = true
   default:
     ret.Value = false
