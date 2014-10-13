@@ -1,12 +1,5 @@
 
-print $ array
-  float 1
-  string 2
+print $ array 1 :2
 
-print $ array
-  float 1
-  array
-    float 2
-    string 3
-    array
-      string 4
+print $ array 1
+  array 2 :3 $ array :4

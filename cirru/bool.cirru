@@ -1,5 +1,7 @@
 
-print $ bool true
-print $ bool false
-print $ bool yes
-print $ bool no
+print #true
+print #false
+print #yes
+print #no
+print #t
+print #f

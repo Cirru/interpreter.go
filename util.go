@@ -8,27 +8,31 @@ import (
 
 func stringifyUnitype(data unitype) string {
   tree := showUnitype(data)
-  lines := []interface{}{tree}
-  return writer.MakeCode(lines)
+  if raw, ok := tree.(string); ok {
+    return raw
+  } else {
+    lines := []interface{}{tree}
+    return writer.MakeCode(lines)
+  }
 }
 
-func showUnitype(data unitype) []interface{} {
+func showUnitype(data unitype) interface{} {
   switch data.Type {
     case uniString:
       if stringValue, ok := data.Value.(string); ok {
-        return []interface{}{"string", stringValue}
+        return fmt.Sprintf(":%s", stringValue)
       }
     case uniFloat:
       if value, ok := data.Value.(float64); ok {
-        str := fmt.Sprintf("%g", value)
-        return []interface{}{"float", str}
+        return fmt.Sprintf("%g", value)
       }
     case uniBool:
       if value, ok := data.Value.(bool); ok {
         if value {
-          return []interface{}{"bool", "true"}
+          return "#true"
+        } else {
+          return "#false"
         }
-        return []interface{}{"bool", "false"}
       }
     case uniArray:
       list := []interface{}{"array"}
@@ -47,8 +51,7 @@ func showUnitype(data unitype) []interface{} {
       }
       return list
     case uniRegexp:
-      str := fmt.Sprintf("%s", data.Value)
-      return []interface{}{"regexp", str}
+      return fmt.Sprintf("/%s", data.Value)
     case uniFn:
       if fnContext, ok := data.Value.(context); ok {
         args := transformCode(fnContext.args)
@@ -56,7 +59,7 @@ func showUnitype(data unitype) []interface{} {
         return []interface{}{"fn", args, code}
       }
     case uniNil:
-      return []interface{}{"nil"}
+      return "@nil"
     default:
       panic("unknown structure")
   }

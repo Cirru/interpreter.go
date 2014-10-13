@@ -2,6 +2,6 @@
 set f $ fn (a b c)
   print a b c
 
-call f (float 1) (float 2) (float 3)
+call f 1 2 3
 
-f (float 1) (float 2) (float 3)
+f 1 2 3

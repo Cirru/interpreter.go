@@ -1,3 +1,3 @@
 
-print $ string a
-print $ string "a b"
+print :a
+print ":a b"

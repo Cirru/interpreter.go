@@ -21,7 +21,12 @@ func (env *scope) getSymbol(x interface{}) string {
 
 func (env *scope) getValue(x interface{}) unitype {
   if tok, ok := x.(token); ok {
-    value, ok := (*env.closure)[tok.Text]
+    text := tok.Text
+    literal, ok := parseUnitype(text)
+    if ok {
+      return literal
+    }
+    value, ok := (*env.closure)[text]
     if ok {
       return value
     }

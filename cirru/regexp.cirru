@@ -1,2 +1,2 @@
 
-print $ regexp ^use
+print /^use

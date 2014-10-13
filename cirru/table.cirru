@@ -1,14 +1,11 @@
 
 print $ table
-  a $ float 5
-  b $ array (float 1) (float 2)
-  c $ table
-    x $ float 1
-    y $ array (float 4)
+  a 5
+  b $ array 1 2
+  c $ table (x 1) (y $ array 4)
 
-set m $ table
-  a $ float 1
+set m $ table (a 1)
 
-set-table m b $ float 2
+set-table m b 2
 
 print m

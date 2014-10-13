@@ -13,6 +13,17 @@ Running `go build bin/cli.go` generates a binary.
 
 [![GoDoc](https://godoc.org/github.com/Cirru/interpreter?status.png)](https://godoc.org/github.com/Cirru/interpreter)
 
+### Compact literal syntax
+
+```
+a      -- variables start with letter
+1.2    -- numbers start with digits
+#true  -- bool values start with sharp
+:str   -- strings start with colon
+/^x    -- regular expressions start with slash
+@nil   -- special values starts with at
+```
+
 ### License
 
 MIT
