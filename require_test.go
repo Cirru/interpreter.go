@@ -17,7 +17,6 @@ func TestCommand(t *testing.T) {
     "function.cirru",
     "ctrl.cirru",
     "require.cirru",
-    "method.cirru",
     "closure.cirru",
     "math.cirru",
   }

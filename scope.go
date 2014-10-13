@@ -36,9 +36,7 @@ func (env *scope) getValue(x interface{}) unitype {
   panic("getValue expects code")
 }
 
-func (env *scope) setValue(x interface{}, y interface{}) unitype {
-  key := env.getSymbol(x)
-  value := env.getValue(y)
-  env.setValue(key, value)
+func (env *scope) setValue(key string, value unitype) unitype {
+  (*env.closure)[key] = value
   return value
 }

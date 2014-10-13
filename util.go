@@ -32,7 +32,7 @@ func showUnitype(data unitype) []interface{} {
       }
     case uniArray:
       list := []interface{}{"array"}
-      value, _ := data.Value.(*map[unitype]unitype)
+      value, _ := data.Value.(*mapping)
       for _, item := range *value {
         list = append(list, showUnitype(item))
       }
@@ -88,7 +88,7 @@ func uni(x interface{}) (ret unitype) {
     ret = unitype{uniString, value}
   case bool:
     ret = unitype{uniBool, value}
-  case *scope:
+  case *mapping:
     ret = unitype{uniTable, value}
   default: panic("not implemented in uni")
   }

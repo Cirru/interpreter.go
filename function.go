@@ -30,26 +30,3 @@ func (env *scope) call(xs sequence) (ret unitype) {
   }
   return
 }
-
-func (env *scope) method(xs sequence) (ret unitype) {
-  target := env.getValue(xs[0])
-  if target.Type != uniTable {
-    panic("method expects a table")
-  }
-  area, _ := target.Value.(*scope)
-  item := area.getValue(xs[1])
-  if item.Type != uniFn {
-    return item
-  }
-  ctx, _ := item.Value.(context)
-  runtime := newScope(ctx.closure)
-  for i, arg := range ctx.args {
-    tok, _ := arg.(token)
-    runtime.setValue(tok.Text, env.getValue(xs[i+1]))
-  }
-  ret = uni(nil)
-  for _, line := range ctx.code {
-    ret = runtime.getValue(line)
-  }
-  return
-}

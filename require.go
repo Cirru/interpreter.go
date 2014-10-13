@@ -9,7 +9,7 @@ import (
   "io/ioutil"
 )
 
-var moduleCenter map[string]unitype
+var moduleCenter *map[string]unitype
 
 func (env *scope) require(xs sequence) (ret unitype) {
   tok, ok := xs[0].(token)
@@ -17,7 +17,7 @@ func (env *scope) require(xs sequence) (ret unitype) {
     panic("require expects a token")
   }
   name := tok.Text
-  if cache, ok := moduleCenter[name]; ok {
+  if cache, ok := (*moduleCenter)[name]; ok {
     return cache
   }
   var filepath string
@@ -36,12 +36,15 @@ func (env *scope) require(xs sequence) (ret unitype) {
 
 // Reads file and evaluate.
 func Interpret(filepath string) (ret unitype) {
-  fileScope := &scope{}
-  exports := &scope{}
+  if moduleCenter == nil {
+    moduleCenter = &map[string]unitype{}
+  }
+  fileScope := newFileScope()
+  exports := &mapping{}
   (*fileScope.closure)["filepath"] = uni(filepath)
   ret = uni(exports)
   (*fileScope.closure)["exports"] = ret
-  moduleCenter[filepath] = ret
+  (*moduleCenter)[filepath] = ret
 
   codeByte, err := ioutil.ReadFile(filepath)
   if err != nil {

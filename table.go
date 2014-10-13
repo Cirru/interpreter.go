@@ -10,9 +10,9 @@ func (env *scope) _table(xs sequence) (ret unitype) {
     if !ok {
       panic("table expects sequence")
     }
-    key := env.getValue(pair[0])
+    key := env.getSymbol(pair[0])
     value := env.getValue(pair[1])
-    (*hold)[key] = value
+    (*hold)[uni(key)] = value
   }
   return
 }

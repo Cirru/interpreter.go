@@ -50,8 +50,6 @@ func userCall(env *scope, xs sequence) (ret unitype) {
   ret = uni(nil)
   if head.Type == uniFn {
     ret = env.call(xs)
-  } else if head.Type == uniTable {
-    ret = env.method(xs)
   } else {
     fmt.Println(xs, head, *env)
     panic("can not find handler")
