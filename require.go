@@ -6,10 +6,12 @@ import (
   "github.com/Cirru/parser"
   "path"
   "os"
+  "bufio"
+  "fmt"
   "io/ioutil"
 )
 
-var moduleCenter *map[string]unitype
+var moduleCenter *object
 
 func (env *scope) require(xs sequence) (ret unitype) {
   tok, ok := xs[0].(token)
@@ -37,15 +39,25 @@ func (env *scope) require(xs sequence) (ret unitype) {
 // Reads file and evaluate.
 func Interpret(filepath string) (ret unitype) {
   if moduleCenter == nil {
-    moduleCenter = &map[string]unitype{}
+    moduleCenter = &object{}
   }
   fileScope := newFileScope()
   exports := &mapping{}
-  (*fileScope.closure)["filepath"] = uni(filepath)
   ret = uni(exports)
+  (*fileScope.closure)["filepath"] = uni(filepath)
   (*fileScope.closure)["exports"] = ret
   (*moduleCenter)[filepath] = ret
 
+  if filepath == "repl" {
+    runRepl(fileScope)
+  } else {
+    runFile(filepath, fileScope)
+  }
+
+  return
+}
+
+func runFile(filepath string, fileScope *scope) {
   codeByte, err := ioutil.ReadFile(filepath)
   if err != nil {
     panic(err)
@@ -62,7 +74,29 @@ func Interpret(filepath string) (ret unitype) {
   for _, line := range ast {
     fileScope.getValue(line)
   }
-  return
+}
+
+func runRepl(fileScope *scope) {
+  reader := bufio.NewReader(os.Stdin)
+  for {
+    fmt.Print("cirru> ")
+    text, _ := reader.ReadString('\n')
+    if len(text) == 0 {
+      os.Exit(2)
+    }
+    p := parser.NewParser()
+    p.Filename("repl")
+    for _, c := range []byte(text) {
+      p.Read(rune(c))
+    }
+    p.Complete()
+    ast := toSequence(p.ToArray())
+
+    for _, line := range ast {
+      ret := fileScope.getValue(line)
+      fmt.Println(stringifyUnitype(ret))
+    }
+  }
 }
 
 func toSequence(xs []interface{}) (ret sequence) {

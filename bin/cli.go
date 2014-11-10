@@ -9,7 +9,7 @@ import (
 
 func main() {
   if len(os.Args) < 2 {
-    fmt.Println("Please specify filename")
+    interpreter.Interpret("repl")
     os.Exit(1)
   }
   first := os.Args[1]
